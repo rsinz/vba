@@ -7,145 +7,153 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' æœ€çµ‚æ›´æ–°æ—¥ï¼š2018/04/28  ï¼ rsinz
-' ãƒ¡ã‚½ãƒƒãƒ‰ãƒã‚§ãƒ¼ãƒ³å¯¾å¿œã€€å†…éƒ¨å¤‰æ•°default_è¿½åŠ ã€‚ãƒ¡ã‚½ãƒƒãƒ‰ã®è¿”ã‚Šå€¤ã‚’ArrayEx(Me)ã«å¤‰æ›´ã€‚
-' Is1D/ Is2D/ IsJagg/ ArrayRank/ Exist / SearchIndex ã‚’ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£åŒ–
+' ÅIXV“úF2018/09/18  —rsinz
+' Function Add’Ç‰Á
+' UnionƒoƒOC³
 
 '///////// memo //////////
-' ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆå†…ã‚¨ãƒ©ãƒ¼ã¯ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«è¡¨ç¤ºã—ã¾ã™
-' 3æ¬¡å…ƒä»¥ä¸Šã®é…åˆ—ã¯æ¨å¥¨ã—ã¾ã›ã‚“
-' For each ã§å›ã™éš›ã¯.Value ã‚’ä½¿ã£ã¦ãã ã•ã„ã€‚ã‚¦ã‚©ãƒƒãƒã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã§ã‚¯ãƒ©ãƒƒã‚·ãƒ¥ã™ã‚‹äº‹è±¡ã‚’å›é¿ã§ããªã‹ã£ãŸã§ã™ã€‚NewEnumã®ä¸­ã§å†…éƒ¨é–¢æ•°ã‚’ä½¿ã†ã¨ãƒ€ãƒ¡ã¿ãŸã„
+' ƒIƒuƒWƒFƒNƒg“àƒGƒ‰[‚ÍƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE‚É•\¦‚µ‚Ü‚·
+' 3ŸŒ³ˆÈã‚Ì”z—ñ‚Í„§‚µ‚Ü‚¹‚ñ
+' For each ‚Å‰ñ‚·Û‚Í.Value ‚ğg‚Á‚Ä‚­‚¾‚³‚¢BƒEƒHƒbƒ`ƒEƒBƒ“ƒhƒE‚ÅƒNƒ‰ƒbƒVƒ…‚·‚é–Û‚ğ‰ñ”ğ‚Å‚«‚È‚©‚Á‚½‚Å‚·BNewEnum‚Ì’†‚Å“à•”ŠÖ”‚ğg‚¤‚Æƒ_ƒ‚İ‚½‚¢
 
 
 '///////// property list //////////
-' value :                   [Let] ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
-' SetTable :              [Let] è¡¨å½¢å¼ã«ãªã£ã¦ã„ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¾ã™
-' CurrentRegion :      [Let] è¡¨å½¢å¼ã«ãªã£ã¦ã„ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¾ã™ã€‚SetTable ã‚ˆã‚ŠãŠæ‰‹è»½ã ã‘ã©ã€ä½¿ãˆã‚‹çŠ¶æ³ã«åˆ¶é™ãŒã‚ã‚Šã¾ã™
-' value :                   [Get] ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
-' MinRow :               [Get] è¡Œã®æœ€å°ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-' MaxRow :              [Get] è¡Œã®æœ€å¤§ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-' MinColumn :          [Get] åˆ—ã®æœ€å°ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-' MaxColumn :          [Get] åˆ—ã®æœ€å¤§ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-' Count :                  [Get] è¡Œã¾ãŸã¯åˆ—ã®ç·æ•°
-' IsEmpty_ :            [Get] å†…éƒ¨å¤‰æ•°ãŒç©ºã ã£ãŸã‚‰TRUE
-' Is1D :                    [Get] 1 æ¬¡å…ƒé…åˆ—ã ã£ãŸã‚‰TRUE
-' Is2D :                    [Get] 2 æ¬¡å…ƒé…åˆ—ã ã£ãŸã‚‰TRUE
-' IsJagg :                 [Get] ã‚¸ãƒ£ã‚°é…åˆ—ã ã£ãŸã‚‰TRUE
-' ArrayRank :           [Get] é…åˆ—ã®æ¬¡å…ƒæ•°
-' Exist :                   [Get] é…åˆ—å†…ã§ã®æŒ‡å®šå€¤å­˜åœ¨ãƒã‚§ãƒƒã‚¯
-' Average_ :            [Get] å¹³å‡å€¤ã®ç®—å‡º
-' Sum_ :                  [Get] åˆè¨ˆå€¤ã®ç®—å‡º
-' Median_ :              [Get] ä¸­å¤®å€¤ã®ç®—å‡º
-' Max_ :                  [Get] æœ€å¤§å€¤ã®ç®—å‡º
-' Min_ :                   [Get] æœ€å°å€¤ã®ç®—å‡º
-' Mode_ :                [Get] æœ€é »å€¤ã®ç®—å‡ºã€‚æœ€é »å€¤ã¯è¤‡æ•°ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ã€è¿”ã‚Šå€¤ã¯é…åˆ—ã«ã—ã¦ã„ã¾ã™ã€‚
-' StDev_ :               [Get] æ¨™æº–åå·®ã®ç®—å‡º
-' CPK_ :                  [Get] CPKã®ç®—å‡º
-' SearchIndex :        [Get] é…åˆ—å†…ã®æ¤œç´¢ã€‚æŒ‡å®šåˆ—ã‚’é †æ–¹å‘ãƒ»è¡Œæ–¹å‘ã«ä¸€è‡´ã‚’ã¿ã‚‹ã€‚è¿”ã‚Šå€¤ å€¤ãŒä¸€è‡´ã—ãŸæ·»ãˆå­—
+' value :                   [Let] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
+' SetTable :              [Let] •\Œ`®‚É‚È‚Á‚Ä‚¢‚éƒe[ƒuƒ‹ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ü‚·
+' CurrentRegion :      [Let] •\Œ`®‚É‚È‚Á‚Ä‚¢‚éƒe[ƒuƒ‹ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ü‚·BSetTable ‚æ‚è‚¨èŒy‚¾‚¯‚ÇAg‚¦‚éó‹µ‚É§ŒÀ‚ª‚ ‚è‚Ü‚·
+' value :                   [Get] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
+' MinRow :               [Get] s‚ÌÅ¬ƒCƒ“ƒfƒbƒNƒX
+' MaxRow :              [Get] s‚ÌÅ‘åƒCƒ“ƒfƒbƒNƒX
+' MinColumn :          [Get] —ñ‚ÌÅ¬ƒCƒ“ƒfƒbƒNƒX
+' MaxColumn :          [Get] —ñ‚ÌÅ‘åƒCƒ“ƒfƒbƒNƒX
+' Count :                  [Get] s‚Ü‚½‚Í—ñ‚Ì‘”
+' IsEmpty_ :            [Get] “à•”•Ï”‚ª‹ó‚¾‚Á‚½‚çTRUE
+' Is1D :                    [Get] 1 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
+' Is2D :                    [Get] 2 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
+' IsJagg :                 [Get] ƒWƒƒƒO”z—ñ‚¾‚Á‚½‚çTRUE
+' ArrayRank :           [Get] ”z—ñ‚ÌŸŒ³”
+' Exist :                   [Get] ”z—ñ“à‚Å‚Ìw’è’l‘¶İƒ`ƒFƒbƒN
+' Average_ :            [Get] •½‹Ï’l‚ÌZo
+' Sum_ :                  [Get] ‡Œv’l‚ÌZo
+' Median_ :              [Get] ’†‰›’l‚ÌZo
+' Max_ :                  [Get] Å‘å’l‚ÌZo
+' Min_ :                   [Get] Å¬’l‚ÌZo
+' Mode_ :                [Get] Å•p’l‚ÌZoBÅ•p’l‚Í•¡”‚ ‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚ÅA•Ô‚è’l‚Í”z—ñ‚É‚µ‚Ä‚¢‚Ü‚·B
+' StDev_ :               [Get] •W€•Î·‚ÌZo
+' CPK_ :                  [Get] CPK‚ÌZo
+' SearchIndex :        [Get] ”z—ñ“à‚ÌŒŸõBw’è—ñ‚ğ‡•ûŒüEs•ûŒü‚Éˆê’v‚ğ‚İ‚éB•Ô‚è’l ’l‚ªˆê’v‚µ‚½“Y‚¦š
 
 
 '///////// module list //////////
-' Init :                   å†…éƒ¨å¤‰æ•° array_ã‚’åˆæœŸå€¤ã«æˆ»ã—ã¾ã™ã€‚ç¹°ã‚Šè¿”ã— ArrayEx ã‚’ä½¿ã†å ´åˆã«å‘¼ã³å‡ºã—ã¾ã™ã€‚
-' To1D:                  2æ¬¡å…ƒé…åˆ—ã‚’1æ¬¡å…ƒé…åˆ—ã«ã™ã‚‹ã€‚
-' To2D:                  1æ¬¡å…ƒé…åˆ—ã‚’2æ¬¡å…ƒé…åˆ—ã«ã™ã‚‹ã€‚
-' FirstIndexTo:       æœ€åˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å¼•æ•° indexã«å¼·åˆ¶ã™ã‚‹
-' Remove :             é…åˆ—å†…ã‹ã‚‰æŒ‡å®šå€¤ã®è¦ç´ ã”ã¨å‰Šé™¤(é…åˆ—ãŒåœ§ç¸®ã•ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹)ã€‚
-' ReplaceNullTo:    é…åˆ—å†…ã®Null/Empty ã‚’å¼•æ•°å€¤ã«ç½®æ›
-' Filter_:                é…åˆ—ã®ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼çµæœã‚’è¿”ã™ï½¡
-' Append:              é…åˆ—æ‹¡å¼µ
-' Slicer:                  é…åˆ—ã‹ã‚‰æŒ‡å®šã®ï¼‘è¡Œã¾ãŸã¯ï¼‘åˆ—ã‚’å–ã‚Šå‡ºã™ã€‚è¿”ã‚Šå€¤ 1æ¬¡å…ƒé…åˆ—
-' Select_:              æŒ‡å®šã•ã‚ŒãŸåˆ—ã®å–ã‚Šå‡ºã—
-' Union:                 é…åˆ—ã®çµåˆ
-' GroupBy:              é…åˆ—å†…ã®è¡Œãƒ‡ãƒ¼ã‚¿é‡è¤‡å‰Šé™¤
-' ToSheet:              Excelã‚·ãƒ¼ãƒˆã«é…åˆ—ãƒ‡ãƒ¼ã‚¿ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
-' Execute:              SQLã®å®Ÿè¡Œ
-' FROM:                  SQL.FROMå¥ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼é–¢æ•°ã€€æ–°è¦ã‚·ãƒ¼ãƒˆã‚’æœ«å°¾ã«è¿½åŠ ã—ã¦ã€ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ä»£ã‚ã‚Šã«ã™ã‚‹
-' DebugPrint:         å¼•æ•°ã«å‹ãƒãƒ¼ã‚¯ã‚’ä»˜ã‘ã¦ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«æ›¸ãå‡ºã™
+' Init :                   “à•”•Ï” array_‚ğ‰Šú’l‚É–ß‚µ‚Ü‚·BŒJ‚è•Ô‚µ ArrayEx ‚ğg‚¤ê‡‚ÉŒÄ‚Ño‚µ‚Ü‚·B
+' To1D:                  2ŸŒ³”z—ñ‚ğ1ŸŒ³”z—ñ‚É‚·‚éB
+' To2D:                  1ŸŒ³”z—ñ‚ğ2ŸŒ³”z—ñ‚É‚·‚éB
+' FirstIndexTo:       Å‰‚ÌƒCƒ“ƒfƒbƒNƒX‚ğˆø” index‚É‹­§‚·‚é
+' Remove :             ”z—ñ“à‚©‚çw’è’l‚Ì—v‘f‚²‚Æíœ(”z—ñ‚ªˆ³k‚³‚ê‚é‰Â”\«‚ª‚ ‚é)B
+' ReplaceNullTo:    ”z—ñ“à‚ÌNull/Empty ‚ğˆø”’l‚É’uŠ·
+' Filter_:                ”z—ñ‚ÌƒtƒBƒ‹ƒ^[Œ‹‰Ê‚ğ•Ô‚·¡
+' Append:              ”z—ñ‚Ì––”ö‚ÉEMPTYs‚ğ’Ç‰Á‚·‚éB
+' Add :                  ”z—ñ‚É’l‚ğ’Ç‰Á‚·‚éB¦”z—ñŒ‹‡‚µ‚½‚¢ê‡‚ÍUnion‚ğg‚Á‚Ä‚­‚¾‚³‚¢B
+' Slicer:                  ”z—ñ‚©‚çw’è‚Ì‚Ps‚Ü‚½‚Í‚P—ñ‚ğæ‚èo‚·B•Ô‚è’l 1ŸŒ³”z—ñ
+' Select_:              w’è‚³‚ê‚½—ñ‚Ìæ‚èo‚µ
+' Union:                 ”z—ñ‚ÌŒ‹‡
+' GroupBy:              ”z—ñ“à‚Ìsƒf[ƒ^d•¡íœ
+' ToSheet:              ExcelƒV[ƒg‚É”z—ñƒf[ƒ^‚ğ“\‚è•t‚¯‚é
+' Execute:              SQL‚ÌÀs
+' FROM:                  SQL.FROM‹å‚Ìƒwƒ‹ƒp[ŠÖ”@V‹KƒV[ƒg‚ğ––”ö‚É’Ç‰Á‚µ‚ÄAƒf[ƒ^ƒx[ƒX‘ã‚í‚è‚É‚·‚é
+' DebugPrint:         ˆø”‚ÉŒ^ƒ}[ƒN‚ğ•t‚¯‚ÄƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE‚É‘‚«o‚·
 
 
 
 '///////// variables //////////
-Private default_ As Variant       ' ãƒ¡ã‚½ãƒƒãƒ‰ã‚’ä½¿ç”¨ã™ã‚‹ã¨å†…éƒ¨å¤‰æ•° array_ã‚’å¤‰æ›´ã™ã‚‹ä»•æ§˜ã«ã—ã¦ãŠã‚Šã¾ã™(ãƒ¡ã‚½ãƒƒãƒ‰ãƒã‚§ãƒ¼ãƒ³ã®ãŸã‚)ã®ã§ã€è¨ˆç®—å‰ã«æˆ»ã—ãŸã„ã¨ãç”¨ã«ä¿æŒã—ã¦ã„ã¾ã™
+Private default_ As Variant       ' ƒƒ\ƒbƒh‚ğg—p‚·‚é‚Æ“à•”•Ï” array_‚ğ•ÏX‚·‚éd—l‚É‚µ‚Ä‚¨‚è‚Ü‚·(ƒƒ\ƒbƒhƒ`ƒF[ƒ“‚Ì‚½‚ß)‚Ì‚ÅAŒvZ‘O‚É–ß‚µ‚½‚¢‚Æ‚«—p‚É•Û‚µ‚Ä‚¢‚Ü‚·
 Private array_ As Variant
+Private header_ As Variant
 
 '///////// class property //////////
 
-' [Let] ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' [Let] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
 Public Property Let value(v As Variant)
 Attribute value.VB_UserMemId = 0
     default_ = v
     array_ = v
 End Property
 
-' [Let] è¡¨å½¢å¼ã«ãªã£ã¦ã„ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¾ã™
-' ã“ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ã®ã‚»ãƒƒãƒˆã¯ã¡ã‚‡ã£ã¨ç‰¹æ®Šã€‚ -> .SetTable(False, False) = range("A1")ã€€ã¿ãŸã„ãªæ„Ÿã˜ã§
-Public Property Let SetTable(ç©ºç™½è¡Œã‚’ç„¡è¦– As Boolean, ç©ºç™½åˆ—ã‚’ç„¡è¦– As Boolean, å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸ As Range)
+' [Let] •\Œ`®‚É‚È‚Á‚Ä‚¢‚éƒe[ƒuƒ‹ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ü‚·
+' ‚±‚ÌƒvƒƒpƒeƒB‚ÌƒZƒbƒg‚Í‚¿‚å‚Á‚Æ“ÁêB -> .SetTable(False, False) = range("A1")@‚İ‚½‚¢‚ÈŠ´‚¶‚Å
+Public Property Let SetTable(‹ó”’s‚ğ–³‹ As Boolean, ‹ó”’—ñ‚ğ–³‹ As Boolean, ¶ã‚ÌƒŒƒ“ƒW As Range)
     
-    Dim lastRow_ As Long: lastRow_ = LastRow(å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸, ç©ºç™½è¡Œã‚’ç„¡è¦–)
-    Dim lastCol_ As Long: lastCol_ = LastCol(å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸, ç©ºç™½åˆ—ã‚’ç„¡è¦–)
+    Dim lastRow_ As Long: lastRow_ = LastRow(¶ã‚ÌƒŒƒ“ƒW, ‹ó”’s‚ğ–³‹)
+    Dim lastCol_ As Long: lastCol_ = LastCol(¶ã‚ÌƒŒƒ“ƒW, ‹ó”’—ñ‚ğ–³‹)
         
-    With å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸.Parent
-        value = .Range(.Cells(å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸.Row, å·¦ä¸Šã®ãƒ¬ãƒ³ã‚¸.column), .Cells(lastRow_, lastCol_))
+    With ¶ã‚ÌƒŒƒ“ƒW.Parent
+        value = .Range(.Cells(¶ã‚ÌƒŒƒ“ƒW.Row, ¶ã‚ÌƒŒƒ“ƒW.column), .Cells(lastRow_, lastCol_))
     End With
     
 End Property
 
-' [Let] è¡¨å½¢å¼ã«ãªã£ã¦ã„ã‚‹ãƒ†ãƒ¼ãƒ–ãƒ«ãƒ‡ãƒ¼ã‚¿ã‚’ã‚»ãƒƒãƒˆã—ã¾ã™ã€‚SetTable ã‚ˆã‚ŠãŠæ‰‹è»½ã ã‘ã©ã€ä½¿ãˆã‚‹çŠ¶æ³ã«åˆ¶é™ãŒã‚ã‚Šã¾ã™
-Public Property Let CurrentRegion(ãƒ†ãƒ¼ãƒ–ãƒ«å†…ãƒ¬ãƒ³ã‚¸ As Range)
+' [Let] •\Œ`®‚É‚È‚Á‚Ä‚¢‚éƒe[ƒuƒ‹ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ü‚·BSetTable ‚æ‚è‚¨èŒy‚¾‚¯‚ÇAg‚¦‚éó‹µ‚É§ŒÀ‚ª‚ ‚è‚Ü‚·
+Public Property Let CurrentRegion(ƒe[ƒuƒ‹“àƒŒƒ“ƒW As Range)
 
-    Dim rng As Range: Set rng = ãƒ†ãƒ¼ãƒ–ãƒ«å†…ãƒ¬ãƒ³ã‚¸.CurrentRegion
-    value = rng.Offset(1, 0).Resize(rng.Rows.Count - 1, rng.Columns.Count)   ' ãƒ˜ãƒƒãƒ€ãƒ¼åˆ†ã®è¡Œã‚’å–ã‚Šé™¤ãã¾ã™
+    Dim rng As Range: Set rng = ƒe[ƒuƒ‹“àƒŒƒ“ƒW.CurrentRegion
+    value = rng.Offset(1, 0).Resize(rng.Rows.Count - 1, rng.Columns.Count)   ' ƒwƒbƒ_[•ª‚Ìs‚ğæ‚èœ‚«‚Ü‚·
 
 End Property
 
-' [Get] ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆãƒ—ãƒ­ãƒ‘ãƒ†ã‚£
+' [Let] ƒwƒbƒ_[‚Ìİ’è
+Public Property Let Headers(h As Variant)
+    If Is2D(h) Then h = To1D(h)
+    header_ = h
+End Property
+
+' [Get] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
 Public Property Get value() As Variant
     value = array_
 End Property
 
-' [Get] è¡Œã®æœ€å°ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-Public Property Get MinRow(Optional é…åˆ— As Variant = Empty) As Variant     ' é…åˆ—ã®å¤§ãã•ã«ã‚ˆã£ã¦ã€Integer ã«ã‚‚ Long ã«ã‚‚ã—ãŸã„ã®ã§ Variant ã§å®šç¾©ã—ã¦ã¾ã™
+' [Get] s‚ÌÅ¬ƒCƒ“ƒfƒbƒNƒX
+Public Property Get MinRow(Optional ”z—ñ As Variant = Empty) As Variant     ' ”z—ñ‚Ì‘å‚«‚³‚É‚æ‚Á‚ÄAInteger ‚É‚à Long ‚É‚à‚µ‚½‚¢‚Ì‚Å Variant ‚Å’è‹`‚µ‚Ä‚Ü‚·
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.MinRow:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Property
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.MinRow:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Property
     MinRow = LBound(arr, 1)
     
 End Property
 
-' [Get] è¡Œã®æœ€å¤§ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-Public Property Get MaxRow(Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] s‚ÌÅ‘åƒCƒ“ƒfƒbƒNƒX
+Public Property Get MaxRow(Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.MaxRow:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Property
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.MaxRow:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Property
     MaxRow = UBound(arr, 1)
     
 End Property
 
-' [Get] åˆ—ã®æœ€å°ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-Public Property Get MinColumn(Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] —ñ‚ÌÅ¬ƒCƒ“ƒfƒbƒNƒX
+Public Property Get MinColumn(Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.MinColumn:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Property
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.MinColumn:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Property
     MinColumn = LBound(arr, 2)
     
 End Property
 
-' [Get] åˆ—ã®æœ€å¤§ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹
-Public Property Get MaxColumn(Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] —ñ‚ÌÅ‘åƒCƒ“ƒfƒbƒNƒX
+Public Property Get MaxColumn(Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.MaxColumn:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Property
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.MaxColumn:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Property
     MaxColumn = UBound(arr, 2)
     
 End Property
 
-' [Get] è¡Œã¾ãŸã¯åˆ—ã®ç·æ•°
-Public Property Get Count(Optional è¡Œåˆ— As XlRowCol = XlRowCol.xlRows, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] s‚Ü‚½‚Í—ñ‚Ì‘”
+Public Property Get Count(Optional s—ñ As XlRowCol = XlRowCol.xlRows, Optional ”z—ñ As Variant = Empty) As Variant
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Count:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Property
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Count:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Property
     
-    If è¡Œåˆ— = XlRowCol.xlRows Then
+    If s—ñ = XlRowCol.xlRows Then
         Count = MaxRow(arr) - MinRow(arr) + 1
     Else
         Count = MaxColumn(arr) - MinColumn(arr) + 1
@@ -153,28 +161,28 @@ Public Property Get Count(Optional è¡Œåˆ— As XlRowCol = XlRowCol.xlRows, Optiona
 
 End Property
 
-' [Get] å†…éƒ¨å¤‰æ•°ãŒç©ºã ã£ãŸã‚‰TRUE
+' [Get] “à•”•Ï”‚ª‹ó‚¾‚Á‚½‚çTRUE
 Public Property Get IsEmpty_() As Boolean
     IsEmpty_ = (IsEmpty(array_))
 End Property
 
-' [Get] 1 æ¬¡å…ƒé…åˆ—ã ã£ãŸã‚‰TRUE
-Public Property Get Is1D(Optional é…åˆ— As Variant = Empty) As Boolean
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+' [Get] 1 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
+Public Property Get Is1D(Optional ”z—ñ As Variant = Empty) As Boolean
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Is1D = IIf(ArrayRank(arr) = 1, True, False)
 End Property
 
-' [Get] 2 æ¬¡å…ƒé…åˆ—ã ã£ãŸã‚‰TRUE
-Public Property Get Is2D(Optional é…åˆ— As Variant = Empty) As Boolean
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+' [Get] 2 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
+Public Property Get Is2D(Optional ”z—ñ As Variant = Empty) As Boolean
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Is2D = IIf(ArrayRank(arr) = 2, True, False)
 End Property
 
-' [Get] ã‚¸ãƒ£ã‚°é…åˆ—ã ã£ãŸã‚‰TRUE
-Function IsJagg(Optional é…åˆ— As Variant = Empty) As Boolean
+' [Get] ƒWƒƒƒO”z—ñ‚¾‚Á‚½‚çTRUE
+Function IsJagg(Optional ”z—ñ As Variant = Empty) As Boolean
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.IsJagg:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Function
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.IsJagg:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Function
     If ArrayRank(arr) > 1 Then Exit Function
     
     Dim v1 As Variant, v2 As Variant
@@ -192,10 +200,10 @@ Function IsJagg(Optional é…åˆ— As Variant = Empty) As Boolean
     
 End Function
 
-' [Get] é…åˆ—ã®æ¬¡å…ƒæ•°
-Public Property Get ArrayRank(Optional é…åˆ— As Variant = Empty) As Integer
+' [Get] ”z—ñ‚ÌŸŒ³”
+Public Property Get ArrayRank(Optional ”z—ñ As Variant = Empty) As Integer
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     On Error Resume Next
     Do While Err.Number = 0
@@ -207,194 +215,207 @@ Public Property Get ArrayRank(Optional é…åˆ— As Variant = Empty) As Integer
     ArrayRank = i - 1
 End Property
 
-' [Get] é…åˆ—å†…ã§ã®æŒ‡å®šå€¤å­˜åœ¨ãƒã‚§ãƒƒã‚¯
-Public Property Get Exist(ByVal æ¤œç´¢å€¤ As Variant, Optional æ¤œç´¢åˆ— As Long = 0, Optional é–‹å§‹è¡Œ As Long = 0, _
-                                    Optional æ¤œç´¢æ–¹æ³• As XlLookAt = XlLookAt.xlWhole, Optional é…åˆ— = Empty) As Boolean
+' [Get] ”z—ñ“à‚Å‚Ìw’è’l‘¶İƒ`ƒFƒbƒN
+Public Property Get Exist(ByVal ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, Optional ŠJns As Long = 0, _
+                                    Optional ŒŸõ•û–@ As XlLookAt = XlLookAt.xlWhole, Optional ”z—ñ = Empty) As Boolean
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Exist: æ¤œç´¢å¯¾è±¡ã¯é…åˆ—ã§æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-    If (ArrayRank(arr) = 2) And ((æ¤œç´¢åˆ— < LBound(arr)) Or (æ¤œç´¢åˆ— > UBound(arr))) Then Debug.Print "ArrayEx.Exist: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Exist: ŒŸõ‘ÎÛ‚Í”z—ñ‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+    If (ArrayRank(arr) = 2) And ((ŒŸõ—ñ < LBound(arr)) Or (ŒŸõ—ñ > UBound(arr))) Then Debug.Print "ArrayEx.Exist: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõ—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
-    Exist = IIf(SearchIndex(æ¤œç´¢å€¤, æ¤œç´¢åˆ—, é–‹å§‹è¡Œ, æ¤œç´¢æ–¹æ³•, arr) = -1, False, True)
+    Exist = IIf(SearchIndex(ŒŸõ’l, ŒŸõ—ñ, ŠJns, ŒŸõ•û–@, arr) = -1, False, True)
 ExitHandler:
 End Property
 
-' [Get] å¹³å‡å€¤ã®ç®—å‡º
-Public Property Get Average_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] •½‹Ï’l‚ÌZo
+Public Property Get Average_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Average_ = WorksheetFunction.Average(arr)
-        Case 2: Average_ = WorksheetFunction.Average(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Average_ = WorksheetFunction.Average(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
     
 End Property
 
-' [Get] åˆè¨ˆå€¤ã®ç®—å‡º
-Public Property Get Sum_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] ‡Œv’l‚ÌZo
+Public Property Get Sum_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Sum_ = WorksheetFunction.Sum(arr)
-        Case 2: Sum_ = WorksheetFunction.Sum(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Sum_ = WorksheetFunction.Sum(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
 
 End Property
 
-' [Get] ä¸­å¤®å€¤ã®ç®—å‡º
-Public Property Get Median_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] ’†‰›’l‚ÌZo
+Public Property Get Median_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Median_ = WorksheetFunction.Median(arr)
-        Case 2: Median_ = WorksheetFunction.Median(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Median_ = WorksheetFunction.Median(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
 
 End Property
 
-' [Get] æœ€å¤§å€¤ã®ç®—å‡º
-Public Property Get Max_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] Å‘å’l‚ÌZo
+Public Property Get Max_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Max_ = WorksheetFunction.Max(arr)
-        Case 2: Max_ = WorksheetFunction.Max(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Max_ = WorksheetFunction.Max(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
 
 End Property
 
-' [Get] æœ€å°å€¤ã®ç®—å‡º
-Public Property Get Min_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] Å¬’l‚ÌZo
+Public Property Get Min_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Min_ = WorksheetFunction.Min(arr)
-        Case 2: Min_ = WorksheetFunction.Min(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Min_ = WorksheetFunction.Min(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
 
 End Property
 
-' [Get] æœ€é »å€¤ã®ç®—å‡ºã€‚æœ€é »å€¤ã¯è¤‡æ•°ã‚ã‚‹ã‹ã‚‚ã—ã‚Œãªã„ã®ã§ã€è¿”ã‚Šå€¤ã¯é…åˆ—ã«ã—ã¦ã„ã¾ã™ã€‚
-Public Property Get Mode_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] Å•p’l‚ÌZoBÅ•p’l‚Í•¡”‚ ‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚ÅA•Ô‚è’l‚Í”z—ñ‚É‚µ‚Ä‚¢‚Ü‚·B
+Public Property Get Mode_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Mode_ = WorksheetFunction.Mode_Mult(arr)
-        Case 2: Mode_ = WorksheetFunction.Mode_Mult(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: Mode_ = WorksheetFunction.Mode_Mult(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
     
 End Property
 
-' [Get] æ¨™æº–åå·®ã®ç®—å‡º
-Public Property Get StDev_(Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] •W€•Î·‚ÌZo
+Public Property Get StDev_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: StDev_ = WorksheetFunction.StDevP(arr)
-        Case 2: StDev_ = WorksheetFunction.StDevP(Slicer(åˆ—ç•ª, xlVerticalCoordinate, arr))
+        Case 2: StDev_ = WorksheetFunction.StDevP(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
                     array_ = arr
     End Select
 
 End Property
 
-' [Get] CPKã®ç®—å‡º
-Public Property Get CPK_(SP As Single, ç®¡ç†å¹… As Single, Optional åˆ—ç•ª As Long = -1, Optional é…åˆ— As Variant = Empty) As Variant
+' [Get] CPK‚ÌZo
+Public Property Get CPK_(SP As Single, ŠÇ—• As Single, Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
-    Dim ave As Single: ave = Average_(åˆ—ç•ª, arr)
-    Dim std As Single: std = StDev_(åˆ—ç•ª, arr)
+    Dim ave As Single: ave = Average_(—ñ”Ô, arr)
+    Dim std As Single: std = StDev_(—ñ”Ô, arr)
     
-    CPK_ = WorksheetFunction.Min(((SP + ç®¡ç†å¹…) - ave), (ave - (SP - ç®¡ç†å¹…))) / (3 * std)
+    CPK_ = WorksheetFunction.Min(((SP + ŠÇ—•) - ave), (ave - (SP - ŠÇ—•))) / (3 * std)
 
 End Property
 
 '<summary>
-'  [Get]é…åˆ—å†…ã®æ¤œç´¢ã€‚æŒ‡å®šåˆ—ã‚’é †æ–¹å‘ãƒ»è¡Œæ–¹å‘ã«ä¸€è‡´ã‚’ã¿ã‚‹
-'ã€€è¿”ã‚Šå€¤ å€¤ãŒä¸€è‡´ã—ãŸ"è¡Œã®"æ·»ãˆå­—ã€‚ç„¡ã‹ã£ãŸã‚‰[-1]ã€‚
+'  [Get]”z—ñ“à‚ÌŒŸõBw’è—ñ‚ğ‡•ûŒüEs•ûŒü‚Éˆê’v‚ğ‚İ‚é
+'@•Ô‚è’l ’l‚ªˆê’v‚µ‚½"s‚Ì"“Y‚¦šB–³‚©‚Á‚½‚ç[-1]B
 '
-'ã€€æ¤œç´¢å€¤ï¼šæ¤œç´¢å€¤
-'ã€€[çœç•¥å¯]  æ¤œç´¢åˆ—ï¼šæ¤œç´¢ã™ã‚‹åˆ—ç•ªå·
-'ã€€[çœç•¥å¯]  æ¤œç´¢é–‹å§‹è¡Œï¼šæ¤œç´¢é–‹å§‹è¡Œç•ªå·ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šé…åˆ—ã®ä¸€ç•ªä¸Šã‹ã‚‰
-'ã€€[çœç•¥å¯]  æ¤œç´¢æ–¹æ³•ï¼šå®Œå…¨ä¸€è‡´ã‹éƒ¨åˆ†ä¸€è‡´ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šå®Œå…¨ä¸€è‡´
+'@ŒŸõ’lFŒŸõ’l
+'@[È—ª‰Â]  ŒŸõ—ñFŒŸõ‚·‚é—ñ”Ô†
+'@[È—ª‰Â]  ŒŸõŠJnsFŒŸõŠJns”Ô†@ƒfƒtƒHƒ‹ƒgF”z—ñ‚Ìˆê”Ôã‚©‚ç
+'@[È—ª‰Â]  ŒŸõ•û–@FŠ®‘Sˆê’v‚©•”•ªˆê’v@ƒfƒtƒHƒ‹ƒgFŠ®‘Sˆê’v
 '</summary>
-Public Property Get SearchIndex(ByVal æ¤œç´¢å€¤ As Variant, Optional æ¤œç´¢åˆ— As Long = 0, _
-                                    Optional æ¤œç´¢é–‹å§‹è¡Œ As Long = 0, Optional æ¤œç´¢æ–¹æ³• As XlLookAt = XlLookAt.xlWhole, Optional é…åˆ— As Variant = Empty) As Long
+Public Property Get SearchIndex(ByVal ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, _
+                                    Optional ŒŸõŠJns As Long = 0, Optional ŒŸõ•û–@ As XlLookAt = XlLookAt.xlWhole, Optional ”z—ñ As Variant = Empty) As Long
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.SearchIndex:ã‚¯ãƒ©ã‚¹ã«é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.SearchIndex:ƒNƒ‰ƒX‚É”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
-    If æ¤œç´¢é–‹å§‹è¡Œ = 0 Then æ¤œç´¢é–‹å§‹è¡Œ = LBound(arr)
-    If (æ¤œç´¢æ–¹æ³• = XlLookAt.xlPart) And Not IsObject(æ¤œç´¢å€¤) And Not IsNull(æ¤œç´¢å€¤) And Not IsEmpty(æ¤œç´¢å€¤) Then æ¤œç´¢å€¤ = "*" & æ¤œç´¢å€¤ & "*"
+    If ŒŸõŠJns = 0 Then ŒŸõŠJns = LBound(arr)
+    If (ŒŸõ•û–@ = XlLookAt.xlPart) And Not IsObject(ŒŸõ’l) And Not IsNull(ŒŸõ’l) And Not IsEmpty(ŒŸõ’l) Then ŒŸõ’l = "*" & ŒŸõ’l & "*"
     
     Select Case ArrayRank(arr)
-        Case 1: ret = Search1D(æ¤œç´¢å€¤, æ¤œç´¢é–‹å§‹è¡Œ, arr)
+        Case 1: ret = Search1D(ŒŸõ’l, ŒŸõŠJns, arr)
         Case 2:
-            If (æ¤œç´¢åˆ— < LBound(arr, 2)) Or (æ¤œç´¢åˆ— > UBound(arr, 2)) Then Debug.Print "ArrayEx.SearchIndex: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-            ret = Search2D(æ¤œç´¢å€¤, æ¤œç´¢åˆ—, æ¤œç´¢é–‹å§‹è¡Œ, arr)
+            If (ŒŸõ—ñ < LBound(arr, 2)) Or (ŒŸõ—ñ > UBound(arr, 2)) Then Debug.Print "ArrayEx.SearchIndex: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõ—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+            ret = Search2D(ŒŸõ’l, ŒŸõ—ñ, ŒŸõŠJns, arr)
     End Select
 
 ExitHandler:
     SearchIndex = ret
 End Property
 
-Private Function Search1D(ByVal æ¤œç´¢å€¤ As Variant, æ¤œç´¢é–‹å§‹è¡Œ As Long, é…åˆ— As Variant) As Long
+Private Function Search1D(ByVal ŒŸõ’l As Variant, ŒŸõŠJns As Long, ”z—ñ As Variant) As Long
         
-    For i = æ¤œç´¢é–‹å§‹è¡Œ To UBound(é…åˆ—)
-        If (IsObject(é…åˆ—(i)) And IsObject(æ¤œç´¢å€¤)) Or _
-            (IsNull(é…åˆ—(i)) And IsNull(æ¤œç´¢å€¤)) Or _
-            (IsEmpty(é…åˆ—(i)) And IsEmpty(æ¤œç´¢å€¤)) Then
+    For i = ŒŸõŠJns To UBound(”z—ñ)
+        If (IsObject(”z—ñ(i)) And IsObject(ŒŸõ’l)) Or _
+            (IsNull(”z—ñ(i)) And IsNull(ŒŸõ’l)) Or _
+            (IsEmpty(”z—ñ(i)) And IsEmpty(ŒŸõ’l)) Then
             
-            If TypeName(é…åˆ—(i)) = TypeName(æ¤œç´¢å€¤) Then Search1D = i: Exit Function
+            If TypeName(”z—ñ(i)) = TypeName(ŒŸõ’l) Then Search1D = i: Exit Function
 
-        ElseIf Not IsObject(é…åˆ—(i)) And Not IsObject(æ¤œç´¢å€¤) Then
-            If (é…åˆ—(i) Like æ¤œç´¢å€¤) Then Search1D = i: Exit Function
+        ElseIf Not IsObject(”z—ñ(i)) And Not IsObject(ŒŸõ’l) Then
+            If (”z—ñ(i) Like ŒŸõ’l) Then Search1D = i: Exit Function
         End If
     Next i
 
-    Search1D = -1       ' æ¤œç´¢å€¤ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸæ™‚
+    Search1D = -1       ' ŒŸõ’l‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
 End Function
 
-Private Function Search2D(ByVal æ¤œç´¢å€¤ As Variant, æ¤œç´¢åˆ— As Long, æ¤œç´¢é–‹å§‹è¡Œ As Long, é…åˆ— As Variant) As Long
+Private Function Search2D(ByVal ŒŸõ’l As Variant, ŒŸõ—ñ As Long, ŒŸõŠJns As Long, ”z—ñ As Variant) As Long
         
-        For i = æ¤œç´¢é–‹å§‹è¡Œ To UBound(é…åˆ—)
+        For i = ŒŸõŠJns To UBound(”z—ñ)
             
-            If (IsObject(é…åˆ—(i, æ¤œç´¢åˆ—)) And IsObject(æ¤œç´¢å€¤)) Or _
-                (IsNull(é…åˆ—(i, æ¤œç´¢åˆ—)) And IsNull(æ¤œç´¢å€¤)) Or _
-                (IsEmpty(é…åˆ—(i, æ¤œç´¢åˆ—)) And IsEmpty(æ¤œç´¢å€¤)) Then
+            If (IsObject(”z—ñ(i, ŒŸõ—ñ)) And IsObject(ŒŸõ’l)) Or _
+                (IsNull(”z—ñ(i, ŒŸõ—ñ)) And IsNull(ŒŸõ’l)) Or _
+                (IsEmpty(”z—ñ(i, ŒŸõ—ñ)) And IsEmpty(ŒŸõ’l)) Then
                 
-                If TypeName(é…åˆ—(i, æ¤œç´¢åˆ—)) = TypeName(æ¤œç´¢å€¤) Then Search2D = i: Exit Function
+                If TypeName(”z—ñ(i, ŒŸõ—ñ)) = TypeName(ŒŸõ’l) Then Search2D = i: Exit Function
  
-            ElseIf Not IsObject(é…åˆ—(i, æ¤œç´¢åˆ—)) And Not IsObject(æ¤œç´¢å€¤) Then
-                If (é…åˆ—(i, æ¤œç´¢åˆ—) Like æ¤œç´¢å€¤) Then Search2D = i: Exit Function
+            ElseIf Not IsObject(”z—ñ(i, ŒŸõ—ñ)) And Not IsObject(ŒŸõ’l) Then
+                If (”z—ñ(i, ŒŸõ—ñ) Like ŒŸõ’l) Then Search2D = i: Exit Function
             End If
             
         Next i
 
-    Search2D = -1       ' æ¤œç´¢å€¤ãŒè¦‹ã¤ã‹ã‚‰ãªã‹ã£ãŸæ™‚
+    Search2D = -1       ' ŒŸõ’l‚ªŒ©‚Â‚©‚ç‚È‚©‚Á‚½
 End Function
+
+'<summary>
+'  [Get]“à•”•Ï”header ‚Ì’†‚©‚çAw’è‚³‚ê‚½—ñ–¼‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
+' —ñ–¼ : —ñ‚Ì–¼‘O‚ğ•¶š—ñ‚Åw’è
+'</summary>
+Public Property Get Col(ByVal —ñ–¼ As String) As Long
+
+    If IsEmpty(header_) Then Debug.Print "ArrayEx.Col : ƒwƒbƒ_[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBHeaders ƒvƒƒpƒeƒB‚ğ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B": Exit Property
+    Dim ret As Long: ret = Search1D(—ñ–¼, LBound(header_), header_)
+    If ret = -1 Then Debug.Print "ArrayEx.Col : " & —ñ–¼ & " ‚Æ‚¢‚¤—ñ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB³‚µ‚­w’è‚µ‚Ä‚¢‚é‚©Šm”F‚µ‚Ä‚­‚¾‚³‚¢B": Exit Property
+    Col = ret
+
+End Property
 
 
 '///////// module //////////
 
 '<summary>
-'  å†…éƒ¨å¤‰æ•° array_ã‚’åˆæœŸå€¤ã«æˆ»ã—ã¾ã™ã€‚ç¹°ã‚Šè¿”ã— ArrayEx ã‚’ä½¿ã†å ´åˆã«å‘¼ã³å‡ºã—ã¾ã™ã€‚
+'  “à•”•Ï” array_‚ğ‰Šú’l‚É–ß‚µ‚Ü‚·BŒJ‚è•Ô‚µ ArrayEx ‚ğg‚¤ê‡‚ÉŒÄ‚Ño‚µ‚Ü‚·B
 '</summary>
 Function Init() As ArrayEx
     array_ = default_
@@ -402,17 +423,17 @@ Function Init() As ArrayEx
 End Function
 
 '<summary>
-'  2æ¬¡å…ƒé…åˆ—ã‚’1æ¬¡å…ƒé…åˆ—ã«ã™ã‚‹ã€‚
+'  2ŸŒ³”z—ñ‚ğ1ŸŒ³”z—ñ‚É‚·‚éB
 '
-'ã€€[çœç•¥å¯]  é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—      ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šãƒ­ãƒ¼ã‚«ãƒ«é…åˆ—
+'@[È—ª‰Â]  ”z—ñF‘ÎÛ‚Ì”z—ñ      ƒfƒtƒHƒ‹ƒgFƒ[ƒJƒ‹”z—ñ
 '</summary>
-Function To1D(Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function To1D(Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If Is1D(arr) = True Then Debug.Print "ArrayEx.To1D:æ—¢ã«1æ¬¡å…ƒé…åˆ—ã§ã™": GoTo ExitHandler
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.To1D:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If Is1D(arr) = True Then Debug.Print "ArrayEx.To1D:Šù‚É1ŸŒ³”z—ñ‚Å‚·": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.To1D:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
 
     ReDim ret(LBound(arr) To (UBound(arr) - LBound(arr) + 1) * (UBound(arr, 2) - LBound(arr, 2) + 1) + LBound(arr) - 1)
     Dim cnt As Long: cnt = LBound(ret)
@@ -430,22 +451,22 @@ ExitHandler:
 End Function
 
 '<summary>
-'  1æ¬¡å…ƒé…åˆ—ã‚’2æ¬¡å…ƒé…åˆ—ã«ã™ã‚‹ã€‚
-'  1æ¬¡å…ƒé…åˆ—ã¨2æ¬¡å…ƒé…åˆ—ãŒæ··åˆã™ã‚‹å ´åˆã§ã‚‚ä¸€æ§˜ã®å‡¦ç†ã‚’è¡Œã„ãŸã„ã¨ãã¨ã‹ã«ä½¿ã†
+'  1ŸŒ³”z—ñ‚ğ2ŸŒ³”z—ñ‚É‚·‚éB
+'  1ŸŒ³”z—ñ‚Æ2ŸŒ³”z—ñ‚ª¬‡‚·‚éê‡‚Å‚àˆê—l‚Ìˆ—‚ğs‚¢‚½‚¢‚Æ‚«‚Æ‚©‚Ég‚¤
 '
-'ã€€[çœç•¥å¯]  è¡Œåˆ—æ–¹å‘ï¼šå±•é–‹ã™ã‚‹æ–¹å‘ã€‚xlRows : (0,0),(1,0),(2,0)... ã€€xlColumnsï¼š(0,0),(0,1),(0,2)...ã€€ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šxlRows
-'ã€€[çœç•¥å¯]  é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—      ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šãƒ­ãƒ¼ã‚«ãƒ«é…åˆ—
+'@[È—ª‰Â]  s—ñ•ûŒüF“WŠJ‚·‚é•ûŒüBxlRows : (0,0),(1,0),(2,0)... @xlColumnsF(0,0),(0,1),(0,2)...@ ƒfƒtƒHƒ‹ƒgFxlRows
+'@[È—ª‰Â]  ”z—ñF‘ÎÛ‚Ì”z—ñ      ƒfƒtƒHƒ‹ƒgFƒ[ƒJƒ‹”z—ñ
 '</summary>
-Function To2D(Optional è¡Œåˆ—æ–¹å‘ As XlRowCol = XlRowCol.xlRows, Optional é…åˆ— As Variant = Empty) As ArrayEx
-Attribute To2D.VB_Description = "1æ¬¡å…ƒé…åˆ—ã‚’2æ¬¡å…ƒé…åˆ—ã«å¤‰æ›ã™ã‚‹"
+Function To2D(Optional s—ñ•ûŒü As XlRowCol = XlRowCol.xlRows, Optional ”z—ñ As Variant = Empty) As ArrayEx
+Attribute To2D.VB_Description = "1ŸŒ³”z—ñ‚ğ2ŸŒ³”z—ñ‚É•ÏŠ·‚·‚é"
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
      Dim ret As Variant
      
-    If Is2D(arr) = True Then Debug.Print "ArrayEx.To2D:æ—¢ã«2æ¬¡å…ƒé…åˆ—ã§ã™": GoTo ExitHandler
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.To2D:é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If Is2D(arr) = True Then Debug.Print "ArrayEx.To2D:Šù‚É2ŸŒ³”z—ñ‚Å‚·": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.To2D:”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
-    If è¡Œåˆ—æ–¹å‘ = xlRows Then
+    If s—ñ•ûŒü = xlRows Then
         ReDim ret(LBound(arr) To UBound(arr), LBound(arr) To LBound(arr)) As Variant
         For i = LBound(arr) To UBound(arr)
             Assign ret(i, LBound(arr)), arr(i)
@@ -463,14 +484,14 @@ ExitHandler:
 End Function
 
 '<summary>
-'  é…åˆ—ã‚’ã‚³ãƒ¬ã‚¯ã‚·ãƒ§ãƒ³ã«å¤‰æ›ã™ã‚‹
+'  ”z—ñ‚ğƒRƒŒƒNƒVƒ‡ƒ“‚É•ÏŠ·‚·‚é
 '
-'ã€€[çœç•¥å¯]  é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—      ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šãƒ­ãƒ¼ã‚«ãƒ«é…åˆ—
+'@[È—ª‰Â]  ”z—ñF‘ÎÛ‚Ì”z—ñ      ƒfƒtƒHƒ‹ƒgFƒ[ƒJƒ‹”z—ñ
 '</summary>
-Function ToCollection(Optional é…åˆ— As Variant = Empty) As Collection
+Function ToCollection(Optional ”z—ñ As Variant = Empty) As Collection
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.ToCollection:ã‚¯ãƒ©ã‚¹ã«é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": Exit Function
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.ToCollection:ƒNƒ‰ƒX‚É”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": Exit Function
     
     Select Case ArrayRank(arr)
         Case 1: Set ToCollection = ToCollection1D(arr)
@@ -500,17 +521,17 @@ Private Function ToCollection2D(arr) As Collection
 End Function
 
 '<summary>
-'  æœ€åˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ã‚’å¼•æ•°ã® indexã«å¼·åˆ¶ã™ã‚‹
+'  Å‰‚ÌƒCƒ“ƒfƒbƒNƒX‚ğˆø”‚Ì index‚É‹­§‚·‚é
 '
-' index : å¼·åˆ¶ã—ãŸã„æœ€åˆã®ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹å€¤
-'  [çœç•¥å¯] é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—      ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šãƒ­ãƒ¼ã‚«ãƒ«é…åˆ—
+' index : ‹­§‚µ‚½‚¢Å‰‚ÌƒCƒ“ƒfƒbƒNƒX’l
+'  [È—ª‰Â] ”z—ñF‘ÎÛ‚Ì”z—ñ      ƒfƒtƒHƒ‹ƒgFƒ[ƒJƒ‹”z—ñ
 '</summary>
-Function FirstIndexTo(index As Long, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function FirstIndexTo(index As Long, Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.FirstIndexTo:ã‚¯ãƒ©ã‚¹ã«é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.FirstIndexTo:ƒNƒ‰ƒX‚É”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
     Select Case ArrayRank(arr)
         Case 1: ret = FirstIndexTo1D(index, arr)
@@ -557,23 +578,23 @@ Private Function FirstIndexTo2D(index As Long, arr As Variant) As Variant
 End Function
 
 '<summary>
-'  é…åˆ—å†…ã‹ã‚‰æŒ‡å®šå€¤ã®è¦ç´ ã”ã¨å‰Šé™¤(é…åˆ—ãŒåœ§ç¸®ã•ã‚Œã‚‹å¯èƒ½æ€§ãŒã‚ã‚‹)ã€‚Delete/Clearã§ã¯ãªãRemove
+'  ”z—ñ“à‚©‚çw’è’l‚Ì—v‘f‚²‚Æíœ(”z—ñ‚ªˆ³k‚³‚ê‚é‰Â”\«‚ª‚ ‚é)BDelete/Clear‚Å‚Í‚È‚­Remove
 '
-'ã€€å‰Šé™¤ã™ã‚‹å€¤ï¼šå‰Šé™¤å¯¾è±¡ã«ãªã‚‹Key
-'ã€€[çœç•¥å¯]  åˆ—ç•ªå·ï¼šï¼’æ¬¡å…ƒé…åˆ—ã®å ´åˆã®å¯¾è±¡åˆ—
+'@íœ‚·‚é’lFíœ‘ÎÛ‚É‚È‚éKey
+'@[È—ª‰Â]  —ñ”Ô†F‚QŸŒ³”z—ñ‚Ìê‡‚Ì‘ÎÛ—ñ
 '</summary>
-Function Remove(å‰Šé™¤ã™ã‚‹å€¤ As Variant, Optional åˆ—ç•ªå· As Long = -1, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function Remove(íœ‚·‚é’l As Variant, Optional —ñ”Ô† As Long = -1, Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Remove:ã‚¯ãƒ©ã‚¹ã«é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Remove:ƒNƒ‰ƒX‚É”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
     Select Case ArrayRank(arr)
-        Case 1: ret = Remove1D(å‰Šé™¤ã™ã‚‹å€¤, arr)
+        Case 1: ret = Remove1D(íœ‚·‚é’l, arr)
         Case 2:
-            If (åˆ—ç•ªå· < LBound(arr, 2)) Or (åˆ—ç•ªå· > UBound(arr, 2)) Then Debug.Print "ArrayEx.Remove: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-            ret = Remove2D(å‰Šé™¤ã™ã‚‹å€¤, åˆ—ç•ªå·, arr)
+            If (—ñ”Ô† < LBound(arr, 2)) Or (—ñ”Ô† > UBound(arr, 2)) Then Debug.Print "ArrayEx.Remove: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõ—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+            ret = Remove2D(íœ‚·‚é’l, —ñ”Ô†, arr)
     End Select
 
 ExitHandler:
@@ -581,13 +602,13 @@ ExitHandler:
     
 End Function
 
-Private Function Remove1D(å‰Šé™¤ã™ã‚‹å€¤ As Variant, é…åˆ— As Variant) As Variant
+Private Function Remove1D(íœ‚·‚é’l As Variant, ”z—ñ As Variant) As Variant
 
-    Dim ret As Variant: ReDim ret(LBound(é…åˆ—) To LBound(é…åˆ—)) As Variant
+    Dim ret As Variant: ReDim ret(LBound(”z—ñ) To LBound(”z—ñ)) As Variant
     
-    For i = LBound(é…åˆ—) To UBound(é…åˆ—)
-        If é…åˆ—(i) <> å‰Šé™¤ã™ã‚‹å€¤ Then
-            Call Assign(ret(UBound(ret)), é…åˆ—(i))
+    For i = LBound(”z—ñ) To UBound(”z—ñ)
+        If ”z—ñ(i) <> íœ‚·‚é’l Then
+            Call Assign(ret(UBound(ret)), ”z—ñ(i))
             ReDim Preserve ret(LBound(ret) To UBound(ret) + 1)
         End If
     Next i
@@ -601,24 +622,24 @@ Private Function Remove1D(å‰Šé™¤ã™ã‚‹å€¤ As Variant, é…åˆ— As Variant) As Vari
     
 End Function
 
-Private Function Remove2D(å‰Šé™¤ã™ã‚‹å€¤ As Variant, åˆ—ç•ªå· As Long, é…åˆ— As Variant) As Variant
+Private Function Remove2D(íœ‚·‚é’l As Variant, —ñ”Ô† As Long, ”z—ñ As Variant) As Variant
 
     Dim ret As Variant
     Dim firstkiss As Boolean: firstkiss = False
     
-    For i = LBound(é…åˆ—) To UBound(é…åˆ—)
+    For i = LBound(”z—ñ) To UBound(”z—ñ)
         
-        If é…åˆ—(i, åˆ—ç•ªå·) <> å‰Šé™¤ã™ã‚‹å€¤ Then
+        If ”z—ñ(i, —ñ”Ô†) <> íœ‚·‚é’l Then
             
             If firstkiss = False Then
-                ReDim ret(LBound(é…åˆ—) To LBound(é…åˆ—), LBound(é…åˆ—, 2) To UBound(é…åˆ—, 2)) As Variant      ' åˆå›ã®ã¿
+                ReDim ret(LBound(”z—ñ) To LBound(”z—ñ), LBound(”z—ñ, 2) To UBound(”z—ñ, 2)) As Variant      ' ‰‰ñ‚Ì‚İ
             Else
-                ret = Append(xlRows, ret)      ' 2æ¬¡å…ƒã®è¡Œè¿½åŠ ã«ã¯ ReDim Preserve ãŒä½¿ãˆã¾ã›ã‚“
+                ret = Append(xlRows, ret)      ' 2ŸŒ³‚Ìs’Ç‰Á‚É‚Í ReDim Preserve ‚ªg‚¦‚Ü‚¹‚ñ
             End If
             
             firstkiss = True
-            For j = LBound(é…åˆ—, 2) To UBound(é…åˆ—, 2)
-                Call Assign(ret(UBound(ret), j), é…åˆ—(i, j))
+            For j = LBound(”z—ñ, 2) To UBound(”z—ñ, 2)
+                Call Assign(ret(UBound(ret), j), ”z—ñ(i, j))
             Next j
             
         End If
@@ -629,22 +650,22 @@ Private Function Remove2D(å‰Šé™¤ã™ã‚‹å€¤ As Variant, åˆ—ç•ªå· As Long, é…åˆ— 
 End Function
 
 '<summary>
-'ã€€é…åˆ—å†…ã®Null/Empty ã‚’å¼•æ•°å€¤ã«ç½®æ›ã€‚
+'@”z—ñ“à‚ÌNull/Empty ‚ğˆø”’l‚É’uŠ·B
 '
-'ã€€ç½®æ›å¾Œã®å€¤ï¼šç½®æ›å¾Œã®å€¤
-'ã€€[çœç•¥å¯] é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—
+'@’uŠ·Œã‚Ì’lF’uŠ·Œã‚Ì’l
+'@[È—ª‰Â] ”z—ñF‘ÎÛ‚Ì”z—ñ
 '</summary>
-Function ReplaceNullTo(ByVal ç½®æ›å¾Œã®å€¤ As Variant, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function ReplaceNullTo(ByVal ’uŠ·Œã‚Ì’l As Variant, Optional ”z—ñ As Variant = Empty) As ArrayEx
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
     If IsArray(arr) = False Then
-        If IsNull(arr) Or IsEmpty(arr) Then Call Assign(ret, ç½®æ›å¾Œã®å€¤)
+        If IsNull(arr) Or IsEmpty(arr) Then Call Assign(ret, ’uŠ·Œã‚Ì’l)
     Else
         Select Case ArrayRank(arr)
-            Case 1: ret = ReplaceNullTo1D(ç½®æ›å¾Œã®å€¤, arr)
-            Case 2: ret = ReplaceNullTo2D(ç½®æ›å¾Œã®å€¤, arr)
+            Case 1: ret = ReplaceNullTo1D(’uŠ·Œã‚Ì’l, arr)
+            Case 2: ret = ReplaceNullTo2D(’uŠ·Œã‚Ì’l, arr)
         End Select
     End If
    
@@ -652,20 +673,20 @@ Function ReplaceNullTo(ByVal ç½®æ›å¾Œã®å€¤ As Variant, Optional é…åˆ— As Vari
 
 End Function
 
-Function ReplaceNullTo1D(ByVal ç½®æ›å¾Œã®å€¤ As Variant, arr As Variant) As Variant
+Function ReplaceNullTo1D(ByVal ’uŠ·Œã‚Ì’l As Variant, arr As Variant) As Variant
     
     For i = LBound(arr, 1) To UBound(arr, 1)
-        If IsNull(arr(i)) Or IsEmpty(arr(i)) Then Call Assign(arr(i), ç½®æ›å¾Œã®å€¤)
+        If IsNull(arr(i)) Or IsEmpty(arr(i)) Then Call Assign(arr(i), ’uŠ·Œã‚Ì’l)
     Next i
     ReplaceNullTo1D = arr
 
 End Function
 
-Function ReplaceNullTo2D(ByVal ç½®æ›å¾Œã®å€¤ As Variant, Optional arr As Variant = Empty) As Variant
+Function ReplaceNullTo2D(ByVal ’uŠ·Œã‚Ì’l As Variant, Optional arr As Variant = Empty) As Variant
 
     For i = LBound(arr, 1) To UBound(arr, 1)
         For j = LBound(arr, 2) To UBound(arr, 2)
-            If IsNull(arr(i, j)) Or IsEmpty(arr(i, j)) Then Call Assign(arr(i, j), ç½®æ›å¾Œã®å€¤)
+            If IsNull(arr(i, j)) Or IsEmpty(arr(i, j)) Then Call Assign(arr(i, j), ’uŠ·Œã‚Ì’l)
         Next j
     Next i
     ReplaceNullTo2D = arr
@@ -673,41 +694,41 @@ Function ReplaceNullTo2D(ByVal ç½®æ›å¾Œã®å€¤ As Variant, Optional arr As Varia
 End Function
 
 '<summary>
-'  é…åˆ—ã®ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼çµæœã‚’è¿”ã™ã€‚
+'  ”z—ñ‚ÌƒtƒBƒ‹ƒ^[Œ‹‰Ê‚ğ•Ô‚·B
 '
-'ã€€æ¤œç´¢å€¤ï¼šæ¤œç´¢å€¤
-'ã€€æ¤œç´¢è¡Œï¼šæ¤œç´¢ã™ã‚‹åˆ—ç•ªå·
-'ã€€[çœç•¥å¯]  æ¤œç´¢æ–¹æ³•ï¼šå®Œå…¨ä¸€è‡´ã‹éƒ¨åˆ†ä¸€è‡´ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šå®Œå…¨ä¸€è‡´
+'@ŒŸõ’lFŒŸõ’l
+'@ŒŸõsFŒŸõ‚·‚é—ñ”Ô†
+'@[È—ª‰Â]  ŒŸõ•û–@FŠ®‘Sˆê’v‚©•”•ªˆê’v@ƒfƒtƒHƒ‹ƒgFŠ®‘Sˆê’v
 '</summary>
-Function Filter_(æ¤œç´¢å€¤ As Variant, Optional æ¤œç´¢åˆ— As Long = 0, _
-                             Optional æ¤œç´¢æ–¹æ³• As XlLookAt = XlLookAt.xlWhole, Optional é…åˆ— = Empty) As ArrayEx
+Function Filter_(ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, _
+                             Optional ŒŸõ•û–@ As XlLookAt = XlLookAt.xlWhole, Optional ”z—ñ = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Filter_: ã‚¯ãƒ©ã‚¹ã«é…åˆ—ã‚’ã‚»ãƒƒãƒˆã—ã¦ãã ã•ã„": GoTo ExitHandler
-    If (æ¤œç´¢æ–¹æ³• = XlLookAt.xlPart) And Not IsObject(æ¤œç´¢å€¤) And Not IsNull(æ¤œç´¢å€¤) And Not IsEmpty(æ¤œç´¢å€¤) Then æ¤œç´¢å€¤ = "*" & æ¤œç´¢å€¤ & "*"
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Filter_: ƒNƒ‰ƒX‚É”z—ñ‚ğƒZƒbƒg‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+    If (ŒŸõ•û–@ = XlLookAt.xlPart) And Not IsObject(ŒŸõ’l) And Not IsNull(ŒŸõ’l) And Not IsEmpty(ŒŸõ’l) Then ŒŸõ’l = "*" & ŒŸõ’l & "*"
     
     Select Case ArrayRank(arr)
-        Case 1: ret = FilterOn1D(æ¤œç´¢å€¤, arr)
+        Case 1: ret = FilterOn1D(ŒŸõ’l, arr)
         Case 2:
-            If (æ¤œç´¢åˆ— < LBound(arr, 2)) Or (æ¤œç´¢åˆ— > UBound(arr, 2)) Then Debug.Print "ArrayEx.Filter_: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-            ret = FilterOn2D(æ¤œç´¢å€¤, æ¤œç´¢åˆ—, arr)
+            If (ŒŸõ—ñ < LBound(arr, 2)) Or (ŒŸõ—ñ > UBound(arr, 2)) Then Debug.Print "ArrayEx.Filter_: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõ—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+            ret = FilterOn2D(ŒŸõ’l, ŒŸõ—ñ, arr)
     End Select
 
 ExitHandler:
     array_ = ret: Set Filter_ = Me
 End Function
 
-Private Function FilterOn1D(æ¤œç´¢å€¤ As Variant, arr As Variant) As Variant
+Private Function FilterOn1D(ŒŸõ’l As Variant, arr As Variant) As Variant
 
     Dim ret As Variant: ReDim ret(LBound(arr) To UBound(arr)) As Variant
-    Dim rowCount As Long: rowCount = LBound(arr)        ' è¿”ã™é…åˆ—ã®è¡Œ
+    Dim rowCount As Long: rowCount = LBound(arr)        ' •Ô‚·”z—ñ‚Ìs
     Dim i As Long
     
     For i = LBound(arr) To UBound(arr)
         
-        i = Search1D(æ¤œç´¢å€¤, i, arr)
+        i = Search1D(ŒŸõ’l, i, arr)
         If i = -1 Then Exit For
         
         Assign ret(rowCount), array_(i)
@@ -720,15 +741,15 @@ Private Function FilterOn1D(æ¤œç´¢å€¤ As Variant, arr As Variant) As Variant
     
 End Function
 
-Private Function FilterOn2D(ByVal æ¤œç´¢å€¤ As Variant, æ¤œç´¢åˆ— As Long, arr As Variant) As Variant
+Private Function FilterOn2D(ByVal ŒŸõ’l As Variant, ŒŸõ—ñ As Long, arr As Variant) As Variant
 
     Dim ret As Variant: ReDim ret(LBound(arr) To UBound(arr), LBound(arr, 2) To UBound(arr, 2)) As Variant
-    Dim rowCount As Long: rowCount = LBound(arr)        ' ä»£å…¥å…ˆã®è¡Œ
+    Dim rowCount As Long: rowCount = LBound(arr)        ' ‘ã“üæ‚Ìs
     Dim i As Long
     
     For i = LBound(arr) To UBound(arr)
     
-        i = Search2D(æ¤œç´¢å€¤, æ¤œç´¢åˆ—, i, arr)
+        i = Search2D(ŒŸõ’l, ŒŸõ—ñ, i, arr)
         If i = -1 Then Exit For
         
         For j = LBound(arr, 2) To UBound(arr, 2)
@@ -739,96 +760,131 @@ Private Function FilterOn2D(ByVal æ¤œç´¢å€¤ As Variant, æ¤œç´¢åˆ— As Long, arr A
     Next i
     
 '    If IsEmpty(ret(LBound(ret))) Then Exit Function
-    FilterOn2D = Remove2D(Empty, æ¤œç´¢åˆ—, ret)
+    FilterOn2D = Remove2D(Empty, ŒŸõ—ñ, ret)
     
 End Function
 
 '<summary>
-'  é…åˆ—æ‹¡å¼µ
+'  ”z—ñ‚Ì––”ö‚ÉEMPTYs‚ğ’Ç‰Á‚·‚é
 '
-'  [çœç•¥å¯]  é…åˆ—ï¼šæ‹¡å¼µã™ã‚‹é…åˆ—
-'  [çœç•¥å¯]  è¡Œåˆ—é¸æŠï¼šè¡Œã‹åˆ—ã‹ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šè¡Œ
+'  [È—ª‰Â]  ”z—ñFŠg’£‚·‚é”z—ñ
+'  [È—ª‰Â]  s—ñ‘I‘ğFs‚©—ñ‚©@ƒfƒtƒHƒ‹ƒgFs
 '</summary>
-Function Append(Optional è¡Œåˆ—é¸æŠ As XlRowCol = XlRowCol.xlRows, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function Append(Optional s—ñ‘I‘ğ As XlRowCol = XlRowCol.xlRows, Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Append: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+'    If IsArray(arr) = False Then Debug.Print "ArrayEx.Append: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
 
-    Select Case ArrayRank(arr)
-        Case 1:
-            ReDim Preserve arr(LBound(arr, 1) To UBound(arr, 1) + 1)
-            ret = arr
-        Case 2:
-            If è¡Œåˆ—é¸æŠ = xlColumns Then
-                ReDim Preserve arr(LBound(arr, 1) To UBound(arr, 1), LBound(arr, 2) To UBound(arr, 2) + 1)       ' Preserveã¯æœ€ä¸‹ä½ã®æ¬¡å…ƒã®ã¿ä½¿ãˆã‚‹
+    If IsEmpty(arr) Then
+        ReDim ret(0) As Variant
+
+    Else
+        Select Case ArrayRank(arr)
+            Case 1:
+                ReDim Preserve arr(LBound(arr, 1) To UBound(arr, 1) + 1)
                 ret = arr
-            Else
-                ReDim ret(LBound(arr, 1) To UBound(arr, 1) + 1, LBound(arr, 2) To UBound(arr, 2))                         ' 2æ¬¡å…ƒé…åˆ—ã®è¡Œã¯åœ°é“ã«
-                Call AssignArray(ret, arr)
-            End If
-    End Select
+            Case 2:
+                If s—ñ‘I‘ğ = xlColumns Then
+                    ReDim Preserve arr(LBound(arr, 1) To UBound(arr, 1), LBound(arr, 2) To UBound(arr, 2) + 1)       ' Preserve‚ÍÅ‰ºˆÊ‚ÌŸŒ³‚Ì‚İg‚¦‚é
+                    ret = arr
+                Else
+                    ReDim ret(LBound(arr, 1) To UBound(arr, 1) + 1, LBound(arr, 2) To UBound(arr, 2))                         ' 2ŸŒ³”z—ñ‚Ìs‚Í’n“¹‚É
+                    Call AssignArray(ret, arr)
+                End If
+        End Select
+        
+    End If
     
 ExitHandler:
     array_ = ret: Set Append = Me
 End Function
 
 '<summary>
-'  é…åˆ—ã‹ã‚‰æŒ‡å®šã®è¡Œ/åˆ—ã‚’å–ã‚Šå‡ºã™ã€‚è¿”ã‚Šå€¤ 1æ¬¡å…ƒé…åˆ—
+'  ”z—ñ‚É’l‚ğ’Ç‰Á‚·‚éB¦”z—ñŒ‹‡‚µ‚½‚¢ê‡‚ÍUnion‚ğg‚Á‚Ä‚­‚¾‚³‚¢B
 '
-'ã€€è¡Œåˆ—ç•ªå·ï¼šè¡Œã¾ãŸã¯åˆ—ã®ç•ªå·ãƒ»æ·»ãˆå­—
-'ã€€[çœç•¥å¯]  è¡Œåˆ—é¸æŠï¼šè¡Œã‹åˆ—ã‹ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šåˆ— â€»è¡¨ã§ã¿ã‚‹ã¨ç¸¦1åˆ—
-'  [çœç•¥å¯]  é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—
+'  ’Ç‰Á’lF’Ç‰Á‚·‚é’l
+'  [È—ª‰Â]  ”z—ñFŠg’£‚·‚é”z—ñ
+'  [È—ª‰Â]  s—ñ‘I‘ğFs‚©—ñ‚©@ƒfƒtƒHƒ‹ƒgFs
 '</summary>
-Function Slicer(è¡Œåˆ—ç•ªå· As Long, Optional è¡Œåˆ—é¸æŠ As XlPieSliceLocation = XlPieSliceLocation.xlVerticalCoordinate, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function Add(’Ç‰Á’l As Variant, Optional s—ñ‘I‘ğ As XlRowCol = XlRowCol.xlRows, Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    Dim ret As Variant: ret = Append(s—ñ‘I‘ğ, arr)
+    
+    Select Case ArrayRank(ret)
+        Case 1:
+            ret(UBound(ret)) = ’Ç‰Á’l
+            
+        Case 2:
+            If s—ñ‘I‘ğ = xlColumns Then
+                ret(LBound(ret, 1), UBound(ret, 2)) = ’Ç‰Á’l
+            Else
+                ret(UBound(ret, 1), LBound(ret, 2)) = ’Ç‰Á’l
+            End If
+            
+    End Select
+    
+ExitHandler:
+    array_ = ret: Set Add = Me
+End Function
+
+'<summary>
+'  ”z—ñ‚©‚çw’è‚Ìs/—ñ‚ğæ‚èo‚·B•Ô‚è’l 1ŸŒ³”z—ñ
+'
+'@s—ñ”Ô†Fs‚Ü‚½‚Í—ñ‚Ì”Ô†E“Y‚¦š
+'@[È—ª‰Â]  s—ñ‘I‘ğFs‚©—ñ‚©@ƒfƒtƒHƒ‹ƒgF—ñ ¦•\‚Å‚İ‚é‚Æc1—ñ
+'  [È—ª‰Â]  ”z—ñF‘ÎÛ‚Ì”z—ñ
+'</summary>
+Function Slicer(s—ñ”Ô† As Long, Optional s—ñ‘I‘ğ As XlPieSliceLocation = XlPieSliceLocation.xlVerticalCoordinate, Optional ”z—ñ As Variant = Empty) As ArrayEx
+
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Slicer: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Slicer: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
     Select Case ArrayRank(arr)
-        Case 1: ret = Slicer1D(è¡Œåˆ—ç•ªå·, è¡Œåˆ—é¸æŠ, arr)
+        Case 1: ret = Slicer1D(s—ñ”Ô†, s—ñ‘I‘ğ, arr)
         Case 2:
-            If è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlVerticalCoordinate Then
-                If (è¡Œåˆ—ç•ªå· < LBound(arr, 2)) Or (è¡Œåˆ—ç•ªå· > UBound(arr, 2)) Then Debug.Print "ArrayEx.Slicer: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-            ElseIf è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlHorizontalCoordinate Then
-                If (è¡Œåˆ—ç•ªå· < LBound(arr, 1)) Or (è¡Œåˆ—ç•ªå· > UBound(arr, 1)) Then Debug.Print "ArrayEx.Slicer: 2æ¬¡å…ƒé…åˆ—ã®å ´åˆã€æœ‰åŠ¹ãªæ¤œç´¢è¡Œã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+            If s—ñ‘I‘ğ = XlPieSliceLocation.xlVerticalCoordinate Then
+                If (s—ñ”Ô† < LBound(arr, 2)) Or (s—ñ”Ô† > UBound(arr, 2)) Then Debug.Print "ArrayEx.Slicer: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõ—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+            ElseIf s—ñ‘I‘ğ = XlPieSliceLocation.xlHorizontalCoordinate Then
+                If (s—ñ”Ô† < LBound(arr, 1)) Or (s—ñ”Ô† > UBound(arr, 1)) Then Debug.Print "ArrayEx.Slicer: 2ŸŒ³”z—ñ‚Ìê‡A—LŒø‚ÈŒŸõs‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
             End If
         
-            ret = Slicer2D(è¡Œåˆ—ç•ªå·, è¡Œåˆ—é¸æŠ, arr)
+            ret = Slicer2D(s—ñ”Ô†, s—ñ‘I‘ğ, arr)
     End Select
 
 ExitHandler:
     array_ = ret: Set Slicer = Me
 End Function
 
-Private Function Slicer1D(è¡Œç•ªå· As Long, è¡Œåˆ—é¸æŠ As XlPieSliceLocation, arr As Variant) As Variant
+Private Function Slicer1D(s”Ô† As Long, s—ñ‘I‘ğ As XlPieSliceLocation, arr As Variant) As Variant
     
-    If è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlVerticalCoordinate Then
+    If s—ñ‘I‘ğ = XlPieSliceLocation.xlVerticalCoordinate Then
         Slicer1D = arr
-    ElseIf è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlHorizontalCoordinate Then
-        Slicer1D = arr(IIf(è¡Œç•ªå· < LBound(arr), LBound(arr), IIf(è¡Œç•ªå· > UBound(arr), UBound(arr), è¡Œç•ªå·)))
+    ElseIf s—ñ‘I‘ğ = XlPieSliceLocation.xlHorizontalCoordinate Then
+        Slicer1D = arr(IIf(s”Ô† < LBound(arr), LBound(arr), IIf(s”Ô† > UBound(arr), UBound(arr), s”Ô†)))
     End If
     
 End Function
 
-Private Function Slicer2D(è¡Œåˆ—ç•ªå· As Long, è¡Œåˆ—é¸æŠ As XlPieSliceLocation, arr As Variant) As Variant
+Private Function Slicer2D(s—ñ”Ô† As Long, s—ñ‘I‘ğ As XlPieSliceLocation, arr As Variant) As Variant
 
     Dim ret As Variant
     If ArrayRank(arr) = 1 Then arr = To2D(xlRows, arr)
     
-    If è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlVerticalCoordinate Then
+    If s—ñ‘I‘ğ = XlPieSliceLocation.xlVerticalCoordinate Then
         ReDim ret(LBound(arr, 1) To UBound(arr, 1))
         For i = LBound(arr, 1) To UBound(arr, 1)
-            Assign ret(i), arr(i, è¡Œåˆ—ç•ªå·)
+            Assign ret(i), arr(i, s—ñ”Ô†)
         Next i
         
-    ElseIf è¡Œåˆ—é¸æŠ = XlPieSliceLocation.xlHorizontalCoordinate Then
+    ElseIf s—ñ‘I‘ğ = XlPieSliceLocation.xlHorizontalCoordinate Then
         ReDim ret(LBound(arr, 2) To UBound(arr, 2))
         For i = LBound(arr, 2) To UBound(arr, 2)
-            Assign ret(i), arr(è¡Œåˆ—ç•ªå·, i)
+            Assign ret(i), arr(s—ñ”Ô†, i)
         Next i
     
     End If
@@ -838,25 +894,25 @@ Private Function Slicer2D(è¡Œåˆ—ç•ªå· As Long, è¡Œåˆ—é¸æŠ As XlPieSliceLocati
 End Function
 
 '<summary>
-'ã€€æŒ‡å®šã•ã‚ŒãŸåˆ—ã®å–ã‚Šå‡ºã—
+'@w’è‚³‚ê‚½—ñ‚Ìæ‚èo‚µ
 '
-'ã€€åˆ—ç•ªå·ï¼šå–ã‚Šå‡ºã™åˆ—ç•ªå·ã€€Array()é–¢æ•°ã§æŒ‡å®š
-'ã€€[çœç•¥å¯] é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—
+'@—ñ”Ô†Fæ‚èo‚·—ñ”Ô†@Array()ŠÖ”‚Åw’è
+'@[È—ª‰Â] ”z—ñF‘ÎÛ‚Ì”z—ñ
 '</summary>
-Function Select_(åˆ—ç•ªå· As Variant, Optional é…åˆ— As Variant = Empty) As ArrayEx
+Function Select_(—ñ”Ô† As Variant, Optional ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.Select_: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
-    If (IsArray(åˆ—ç•ªå·) = False) And (IsNumeric(åˆ—ç•ªå·) = False) Then Debug.Print "ArrayEx.Select_: åˆ—ç•ªå·ã‚’é…åˆ—ã‚‚ã—ãã¯ã€æ•°å€¤ã§æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.Select_: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
+    If (IsArray(—ñ”Ô†) = False) And (IsNumeric(—ñ”Ô†) = False) Then Debug.Print "ArrayEx.Select_: —ñ”Ô†‚ğ”z—ñ‚à‚µ‚­‚ÍA”’l‚Åw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
-    If IsArray(åˆ—ç•ªå·) = False Then
-        ret = Slicer(CLng(åˆ—ç•ªå·), xlVerticalCoordinate, arr)
+    If IsArray(—ñ”Ô†) = False Then
+        ret = Slicer(CLng(—ñ”Ô†), xlVerticalCoordinate, arr)
     Else
-        For i = LBound(åˆ—ç•ªå·) To UBound(åˆ—ç•ªå·)
-            If (åˆ—ç•ªå·(i) > UBound(arr, 2)) Or (åˆ—ç•ªå·(i) < LBound(arr, 2)) Then Debug.Print "ArrayEx.Select_: ã‚¤ãƒ³ãƒ‡ãƒƒã‚¯ã‚¹ãŒç¯„å›²å¤–ã§ã™": Exit For
-            ret = Union(xlColumns, Slicer(CLng(åˆ—ç•ªå·(i)), xlVerticalCoordinate, arr), ret)
+        For i = LBound(—ñ”Ô†) To UBound(—ñ”Ô†)
+            If (—ñ”Ô†(i) > UBound(arr, 2)) Or (—ñ”Ô†(i) < LBound(arr, 2)) Then Debug.Print "ArrayEx.Select_: ƒCƒ“ƒfƒbƒNƒX‚ª”ÍˆÍŠO‚Å‚·": Exit For
+            ret = Union(xlColumns, Slicer(CLng(—ñ”Ô†(i)), xlVerticalCoordinate, arr), ret)
         Next i
     End If
     
@@ -865,28 +921,28 @@ ExitHandler:
 End Function
 
 '<summary>
-'ã€€é…åˆ—ã®çµåˆ
+'@”z—ñ‚ÌŒ‹‡
 '
-'ã€€è¡Œåˆ—æ–¹å‘ï¼šçµåˆã™ã‚‹æ–¹å‘ã€‚Rowãªã‚‰ä¸‹æ–¹å‘ã«ã€Colãªã‚‰å³æ–¹å‘ã«è¿½åŠ ã—ãŸã‚‚ã®ã‚’è¿”ã™
-'  çµåˆã™ã‚‹é…åˆ—ï¼šçµåˆã™ã‚‹é…åˆ—
-'ã€€[çœç•¥å¯] çµåˆã•ã‚Œã‚‹é…åˆ—ï¼šã“ã®é…åˆ—ã‚’åŸºæº–ã«çµåˆã™ã‚‹
+'@s—ñ•ûŒüFŒ‹‡‚·‚é•ûŒüBRow‚È‚ç‰º•ûŒü‚ÉACol‚È‚ç‰E•ûŒü‚É’Ç‰Á‚µ‚½‚à‚Ì‚ğ•Ô‚·
+'  Œ‹‡‚·‚é”z—ñFŒ‹‡‚·‚é”z—ñ
+'@[È—ª‰Â] Œ‹‡‚³‚ê‚é”z—ñF‚±‚Ì”z—ñ‚ğŠî€‚ÉŒ‹‡‚·‚é
 '</summary>
-Function Union(è¡Œåˆ—æ–¹å‘ As XlRowCol, çµåˆã™ã‚‹é…åˆ— As Variant, Optional çµåˆã•ã‚Œã‚‹é…åˆ— As Variant = Null) As ArrayEx
+Function Union(s—ñ•ûŒü As XlRowCol, Œ‹‡‚·‚é”z—ñ As Variant, Optional Œ‹‡‚³‚ê‚é”z—ñ As Variant = Null) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsNull(çµåˆã•ã‚Œã‚‹é…åˆ—), me_, çµåˆã•ã‚Œã‚‹é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsNull(Œ‹‡‚³‚ê‚é”z—ñ), array_, Œ‹‡‚³‚ê‚é”z—ñ)
     Dim ret As Variant
     
     If IsEmpty(arr) Then
-        ret = çµåˆã™ã‚‹é…åˆ—
+        ret = Œ‹‡‚·‚é”z—ñ
         
     Else
-        If (IsArray(arr) = False) Or (IsArray(çµåˆã™ã‚‹é…åˆ—) = False) Then Debug.Print "ArrayEx.Union: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+        If (IsArray(arr) = False) Or (IsArray(Œ‹‡‚·‚é”z—ñ) = False) Then Debug.Print "ArrayEx.Union: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
-        ' arr ã¨çµåˆã™ã‚‹é…åˆ—ãŒãã‚Œãã‚Œï¼‘æ¬¡å…ƒã‹ï¼’æ¬¡å…ƒã‹ã§å‡¦ç†ã‚’åˆ†ã‘ã¦è¨˜è¿°ã™ã‚‹ã®ãŒé¢å€’ã™ãã‚‹ã®ã§ã€ã©ã£ã¡ã‚‚ä¸€æ—¦ã€ï¼’æ¬¡å…ƒã«ã—ã¾ã™
+        ' arr ‚ÆŒ‹‡‚·‚é”z—ñ‚ª‚»‚ê‚¼‚ê‚PŸŒ³‚©‚QŸŒ³‚©‚Åˆ—‚ğ•ª‚¯‚Ä‹Lq‚·‚é‚Ì‚ª–Ê“|‚·‚¬‚é‚Ì‚ÅA‚Ç‚Á‚¿‚àˆê’UA‚QŸŒ³‚É‚µ‚Ü‚·
         If Is1D(arr) Then arr = To2D(xlRows, arr)
-        If Is1D(çµåˆã™ã‚‹é…åˆ—) Then çµåˆã™ã‚‹é…åˆ— = To2D(xlRows, çµåˆã™ã‚‹é…åˆ—)
+        If Is1D(Œ‹‡‚·‚é”z—ñ) Then Œ‹‡‚·‚é”z—ñ = To2D(xlRows, Œ‹‡‚·‚é”z—ñ)
         
-        ret = Union2D(è¡Œåˆ—æ–¹å‘, FirstIndexTo2D(LBound(arr), çµåˆã™ã‚‹é…åˆ—), FirstIndexTo2D(LBound(arr), arr))
+        ret = Union2D(s—ñ•ûŒü, FirstIndexTo2D(LBound(arr), Œ‹‡‚·‚é”z—ñ), FirstIndexTo2D(LBound(arr), arr))
         If LBound(ret, 2) = UBound(ret, 2) Then ret = To1D(ret)
     End If
 
@@ -894,34 +950,34 @@ ExitHandler:
     array_ = ret: Set Union = Me
 End Function
 
-Private Function Union2D(è¡Œåˆ—æ–¹å‘ As XlRowCol, çµåˆã™ã‚‹é…åˆ— As Variant, arr As Variant) As Variant
+Private Function Union2D(s—ñ•ûŒü As XlRowCol, Œ‹‡‚·‚é”z—ñ As Variant, arr As Variant) As Variant
 
     Dim ret As Variant
     
-    If è¡Œåˆ—æ–¹å‘ = XlRowCol.xlRows Then
+    If s—ñ•ûŒü = XlRowCol.xlRows Then
         
-        ReDim ret(LBound(arr) To LBound(arr) + (UBound(arr) - LBound(arr) + 1) + (UBound(çµåˆã™ã‚‹é…åˆ—) - LBound(çµåˆã™ã‚‹é…åˆ—)), _
-                         LBound(arr, 2) To IIf(UBound(arr, 2) > UBound(çµåˆã™ã‚‹é…åˆ—, 2), UBound(arr, 2), UBound(çµåˆã™ã‚‹é…åˆ—, 2))) As Variant
+        ReDim ret(LBound(arr) To LBound(arr) + (UBound(arr) - LBound(arr) + 1) + (UBound(Œ‹‡‚·‚é”z—ñ) - LBound(Œ‹‡‚·‚é”z—ñ)), _
+                         LBound(arr, 2) To IIf(UBound(arr, 2) > UBound(Œ‹‡‚·‚é”z—ñ, 2), UBound(arr, 2), UBound(Œ‹‡‚·‚é”z—ñ, 2))) As Variant
         Call AssignArray(ret, arr)
 
         For i = LBound(ret, 1) To UBound(ret, 1)
-            If i <= UBound(çµåˆã™ã‚‹é…åˆ—) Then
+            If i <= UBound(Œ‹‡‚·‚é”z—ñ) Then
                 For j = LBound(ret, 2) To UBound(ret, 2)
-                    If j <= UBound(çµåˆã™ã‚‹é…åˆ—, 2) Then Call Assign(ret(UBound(arr) - LBound(arr) + 1 + i, j), çµåˆã™ã‚‹é…åˆ—(i, j))
+                    If j <= UBound(Œ‹‡‚·‚é”z—ñ, 2) Then Call Assign(ret(UBound(arr) - LBound(arr) + 1 + i, j), Œ‹‡‚·‚é”z—ñ(i, j))
                 Next j
             End If
         Next i
 
     Else
         
-        ReDim ret(LBound(arr) To IIf(UBound(arr, 1) > UBound(çµåˆã™ã‚‹é…åˆ—, 1), UBound(arr, 1), UBound(çµåˆã™ã‚‹é…åˆ—, 1)), _
-                         LBound(arr, 2) To LBound(arr, 2) + (UBound(arr, 2) - LBound(arr, 2) + 1) + (UBound(çµåˆã™ã‚‹é…åˆ—, 2) - LBound(çµåˆã™ã‚‹é…åˆ—, 2))) As Variant
+        ReDim ret(LBound(arr) To IIf(UBound(arr, 1) > UBound(Œ‹‡‚·‚é”z—ñ, 1), UBound(arr, 1), UBound(Œ‹‡‚·‚é”z—ñ, 1)), _
+                         LBound(arr, 2) To LBound(arr, 2) + (UBound(arr, 2) - LBound(arr, 2) + 1) + (UBound(Œ‹‡‚·‚é”z—ñ, 2) - LBound(Œ‹‡‚·‚é”z—ñ, 2))) As Variant
         Call AssignArray(ret, arr)
 
         For i = LBound(ret, 2) To UBound(ret, 2)
-            If i <= UBound(çµåˆã™ã‚‹é…åˆ—, 2) Then
+            If i <= UBound(Œ‹‡‚·‚é”z—ñ, 2) Then
                 For j = LBound(ret, 1) To UBound(ret, 1)
-                    If j <= UBound(çµåˆã™ã‚‹é…åˆ—) Then Call Assign(ret(j, UBound(arr, 2) - LBound(arr, 2) + 1 + i), çµåˆã™ã‚‹é…åˆ—(j, i))
+                    If j <= UBound(Œ‹‡‚·‚é”z—ñ) Then Call Assign(ret(j, UBound(arr, 2) - LBound(arr, 2) + 1 + i), Œ‹‡‚·‚é”z—ñ(j, i))
                 Next j
             End If
         Next i
@@ -933,16 +989,16 @@ Private Function Union2D(è¡Œåˆ—æ–¹å‘ As XlRowCol, çµåˆã™ã‚‹é…åˆ— As Variant
 End Function
 
 '<summary>
-'ã€€é…åˆ—å†…ã®è¡Œãƒ‡ãƒ¼ã‚¿é‡è¤‡å‰Šé™¤ã€‚2æ¬¡å…ƒã®å ´åˆã€è¡Œãƒ‡ãƒ¼ã‚¿ãŒã™ã¹ã¦ä¸€è‡´ã—ã¦ã„ã‚‹æ™‚ã®ã¿å‰Šé™¤ã—ã¾ã™
+'@”z—ñ“à‚Ìsƒf[ƒ^d•¡íœB2ŸŒ³‚Ìê‡Asƒf[ƒ^‚ª‚·‚×‚Äˆê’v‚µ‚Ä‚¢‚é‚Ì‚İíœ‚µ‚Ü‚·
 '
-'ã€€[çœç•¥å¯] é…åˆ—ï¼šé‡è¤‡å‰Šé™¤å¯¾è±¡ã®é…åˆ—
+'@[È—ª‰Â] ”z—ñFd•¡íœ‘ÎÛ‚Ì”z—ñ
 '</summary>
-Function GroupBy(Optional ByVal é…åˆ— As Variant = Empty) As ArrayEx
+Function GroupBy(Optional ByVal ”z—ñ As Variant = Empty) As ArrayEx
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Dim ret As Variant
     
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.GroupBy: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": GoTo ExitHandler
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.GroupBy: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
     
     Select Case ArrayRank(arr)
         Case 1: ret = GroupBy1D(arr)
@@ -1001,14 +1057,14 @@ Private Function JaggTo2D(arr As Variant) As Variant
 End Function
 
 '<summary>
-'  Excelã‚·ãƒ¼ãƒˆã«é…åˆ—ãƒ‡ãƒ¼ã‚¿ã‚’è²¼ã‚Šä»˜ã‘ã‚‹
+'  ExcelƒV[ƒg‚É”z—ñƒf[ƒ^‚ğ“\‚è•t‚¯‚é
 
-'  baseRange : è²¼ã‚Šä»˜ã‘ã‚‹åŸºæº–(å·¦ä¸Š)ã®ãƒ¬ãƒ³ã‚¸
-'ã€€[çœç•¥å¯] é…åˆ—ï¼šå¯¾è±¡ã®é…åˆ—
+'  baseRange : “\‚è•t‚¯‚éŠî€(¶ã)‚ÌƒŒƒ“ƒW
+'@[È—ª‰Â] ”z—ñF‘ÎÛ‚Ì”z—ñ
 '</summary>
-Sub ToSheet(baseRange As Range, Optional é…åˆ— As Variant = Empty)
+Sub ToSheet(baseRange As Range, Optional ”z—ñ As Variant = Empty)
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     If IsArray(arr) = False Then
         baseRange = arr
@@ -1029,13 +1085,13 @@ Sub ToSheet(baseRange As Range, Optional é…åˆ— As Variant = Empty)
 End Sub
 
 '<summary>
-'  SQLã®å®Ÿè¡Œ
+'  SQL‚ÌÀs
 
-'  sql : SQLæ§‹æ–‡
-'  [çœç•¥å¯] Book : ã‚½ãƒ¼ã‚¹ã«ãªã‚‹ãƒ¯ãƒ¼ã‚¯ãƒ–ãƒƒã‚¯
+'  sql : SQL\•¶
+'  [È—ª‰Â] Book : ƒ\[ƒX‚É‚È‚éƒ[ƒNƒuƒbƒN
 
-' SQLä¾‹1 ãƒ•ã‚£ãƒ«ã‚¿ãƒ¼ï¼šSELECT F1,F3 FROM [Sheet1$B3:E20] WHERE F1 = 'Man' and (F2 >= 20 and F2 < 30) ORDER BY F4, F3 DESC
-' SQLä¾‹2 ãƒªãƒ¬ãƒ¼ï¼šSELECT * FROM [Sheet2$],[Sheet3$] WHERE [Sheet2$].F2 = [Sheet3$].F1 ORDER BY [Sheet2$].F1
+' SQL—á1 ƒtƒBƒ‹ƒ^[FSELECT F1,F3 FROM [Sheet1$B3:E20] WHERE F1 = 'Man' and (F2 >= 20 and F2 < 30) ORDER BY F4, F3 DESC
+' SQL—á2 ƒŠƒŒ[FSELECT * FROM [Sheet2$],[Sheet3$] WHERE [Sheet2$].F2 = [Sheet3$].F1 ORDER BY [Sheet2$].F1
 '</summary>
 Function Execute(sql As String, Optional Book As Workbook = Nothing) As ArrayEx
 
@@ -1044,7 +1100,7 @@ Function Execute(sql As String, Optional Book As Workbook = Nothing) As ArrayEx
     Dim ret As Variant
     If Book Is Nothing Then Set Book = ThisWorkbook
    
-    ' æ¥ç¶šè©¦è¡Œ
+    ' Ú‘±s
     Dim cn As Object: Set cn = CreateObject("ADODB.Connection")
     Call OpenSource(cn, Book)
     
@@ -1066,10 +1122,10 @@ Finally:
 End Function
 
 '<summary>
-'  private] Excelãƒ‡ãƒ¼ã‚¿ã‚½ãƒ¼ã‚¹ã¨æ¥ç¶šã—ã¦ã¿ã‚‹
+'  private] Excelƒf[ƒ^ƒ\[ƒX‚ÆÚ‘±‚µ‚Ä‚İ‚é
 
-'  cn : ADODB.Connection ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-'  wb : ã‚½ãƒ¼ã‚¹ã«ãªã‚‹ãƒ¯ãƒ¼ã‚¯ãƒ–ãƒƒã‚¯
+'  cn : ADODB.Connection ƒIƒuƒWƒFƒNƒg
+'  wb : ƒ\[ƒX‚É‚È‚éƒ[ƒNƒuƒbƒN
 '</summary>
 Private Sub OpenSource(cn As Object, wb As Workbook)
 
@@ -1082,9 +1138,9 @@ Private Sub OpenSource(cn As Object, wb As Workbook)
 End Sub
 
 '<summary>
-'  Private]  ã‚½ãƒ¼ã‚¹ã¨ã®æ¥ç¶šã‚’é–‰ã˜ã‚‹ã€‚
+'  Private]  ƒ\[ƒX‚Æ‚ÌÚ‘±‚ğ•Â‚¶‚éB
 
-'  cn : ADODB.Connection ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
+'  cn : ADODB.Connection ƒIƒuƒWƒFƒNƒg
 '</summary>
 Private Sub CloseSource(cn As Object)
 
@@ -1102,24 +1158,24 @@ Private Sub CloseSource(cn As Object)
 End Sub
 
 '<summary>
-'  SQL.FROMå¥ã®ãƒ˜ãƒ«ãƒ‘ãƒ¼é–¢æ•°ã€‚ã€€æ–°è¦ã‚·ãƒ¼ãƒˆã«é…åˆ—ã‚’è²¼ã‚Šä»˜ã‘ã¦ã€ç¯„å›²æ–‡å­—åˆ—ã‚’è¿”ã™ã€‚
+'  SQL.FROM‹å‚Ìƒwƒ‹ƒp[ŠÖ”B@V‹KƒV[ƒg‚É”z—ñ‚ğ“\‚è•t‚¯‚ÄA”ÍˆÍ•¶š—ñ‚ğ•Ô‚·B
 
-'  [çœç•¥å¯] header1D : ãƒ˜ãƒƒãƒ€ãƒ¼(1æ¬¡å…ƒé…åˆ—)ã€€ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šF1,F2,F3ãƒ»ãƒ»ãƒ»
-'  [çœç•¥å¯] é…åˆ— : ã‚½ãƒ¼ã‚¹ã«ãªã‚‹é…åˆ—
+'  [È—ª‰Â] header1D : ƒwƒbƒ_[(1ŸŒ³”z—ñ)@ƒfƒtƒHƒ‹ƒgFF1,F2,F3EEE
+'  [È—ª‰Â] ”z—ñ : ƒ\[ƒX‚É‚È‚é”z—ñ
 '</summary>
-Function FROM(Optional header1D As Variant = Empty, Optional é…åˆ— As Variant = Empty) As String
+Function FROM(Optional header1D As Variant = Empty, Optional ”z—ñ As Variant = Empty) As String
     
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
-    If IsArray(arr) = False Then Debug.Print "ArrayEx.FROM: å¯¾è±¡ã®é…åˆ—ã‚’æŒ‡å®šã—ã¦ãã ã•ã„": Exit Function
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    If IsArray(arr) = False Then Debug.Print "ArrayEx.FROM: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": Exit Function
     
-    ' æ–°è¦ã‚·ãƒ¼ãƒˆã®è¿½åŠ 
+    ' V‹KƒV[ƒg‚Ì’Ç‰Á
 '    With ThisWorkbook
 '        Set Source = .Worksheets.Add(after:=.Worksheets(.Worksheets.Count))
 '    End With
     
     With ThisWorkbook.Worksheets.Add(after:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
     
-        ' ãƒ˜ãƒƒãƒ€ãƒ¼ã‚’è¿½è¨˜
+        ' ƒwƒbƒ_[‚ğ’Ç‹L
         If IsEmpty(header1D) Then
             For i = LBound(arr, 2) To UBound(arr, 2)
                 .Cells(1, i) = "F" & CStr(i)
@@ -1130,7 +1186,7 @@ Function FROM(Optional header1D As Variant = Empty, Optional é…åˆ— As Variant =
             Next i
         End If
         
-        ' é…åˆ—ã‚’è²¼ã‚Šä»˜ã‘ã¦ã€ç¯„å›²æ–‡å­—åˆ—ã‚’è¿”ã™
+        ' ”z—ñ‚ğ“\‚è•t‚¯‚ÄA”ÍˆÍ•¶š—ñ‚ğ•Ô‚·
         Call ToSheet(.Range("A2"), arr)
         FROM = " FROM [" & .name & "$] "
         Select Case ArrayRank(arr)
@@ -1149,13 +1205,13 @@ End Function
 
 
 '<summary>
-'  å¼•æ•°ã«å‹ãƒãƒ¼ã‚¯ã‚’ä»˜ã‘ã¦ã‚¤ãƒŸãƒ‡ã‚£ã‚¨ã‚¤ãƒˆã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«æ›¸ãå‡ºã™
+'  ˆø”‚ÉŒ^ƒ}[ƒN‚ğ•t‚¯‚ÄƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE‚É‘‚«o‚·
 '
-'  [çœç•¥å¯] xï¼šãƒãƒ¼ã‚¯ã‚’ã¤ã‘ã‚‹å¤‰æ•°ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆï¼šã“ã®ã‚¯ãƒ©ã‚¹ã®å†…éƒ¨å¤‰æ•°arrã‚’æ›¸ãå‡ºã™
+'  [È—ª‰Â] xFƒ}[ƒN‚ğ‚Â‚¯‚é•Ï”BƒfƒtƒHƒ‹ƒgF‚±‚ÌƒNƒ‰ƒX‚Ì“à•”•Ï”arr‚ğ‘‚«o‚·
 '</summary>
-Sub DebugPrint(Optional ByVal é…åˆ— As Variant = Empty)
+Sub DebugPrint(Optional ByVal ”z—ñ As Variant = Empty)
 
-    Dim arr As Variant: arr = IIf(IsEmpty(é…åˆ—), array_, é…åˆ—)
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     Debug.Print (Dump(arr))
 
 End Sub
@@ -1208,12 +1264,12 @@ Function Dump(ByVal x As Variant) As String
         Dim ar As Variant
         Dim i As Long
         
-        If ArrayRank(x) = 1 Then         ' 1æ¬¡å…ƒé…åˆ—
+        If ArrayRank(x) = 1 Then         ' 1ŸŒ³”z—ñ
             ReDim ar(lb To ub)
             For i = lb To ub: ar(i) = Dump(x(i)): Next
             Dump = "Array1D(" & vbNewLine & vbTab & Join(ar, ", " & vbNewLine & vbTab) & vbNewLine & ")"
         
-        ElseIf ArrayRank(x) = 2 Then   ' 2æ¬¡å…ƒé…åˆ—
+        ElseIf ArrayRank(x) = 2 Then   ' 2ŸŒ³”z—ñ
             Dim j As Long
             Dim jStr As String
             Dim lb2 As Long: lb2 = LBound(x, 2)
@@ -1263,10 +1319,10 @@ Ending:
 End Function
 
 '<summary>[private]
-'  baseRangeã‚’åŸºæº–ã¨ã—ãŸæœ€ä¸‹ä½è¡Œã‚’è¿”ã™
+'  baseRange‚ğŠî€‚Æ‚µ‚½Å‰ºˆÊs‚ğ•Ô‚·
 '
-'ã€€baseRangeï¼šåŸºæº–ã¨ãªã‚‹Range
-'ã€€isIgnoreRowBlankï¼šç©ºç™½è¡Œã‚’ç„¡è¦–ã™ã‚‹ã‹,ã€€Trueï¼šç©ºç™½è¡ŒãŠæ§‹ã„ãªã—ã§æœ€çµ‚ãƒ‡ãƒ¼ã‚¿è¡Œã‚’è¿”ã™
+'@baseRangeFŠî€‚Æ‚È‚éRange
+'@isIgnoreRowBlankF‹ó”’s‚ğ–³‹‚·‚é‚©,@TrueF‹ó”’s‚¨\‚¢‚È‚µ‚ÅÅIƒf[ƒ^s‚ğ•Ô‚·
 '</summary>
 Private Function LastRow(ByVal baseRange As Range, isIgnoreRowBlank As Boolean) As Long
 
@@ -1281,10 +1337,10 @@ Private Function LastRow(ByVal baseRange As Range, isIgnoreRowBlank As Boolean) 
 End Function
 
 '<summary>[private]
-'  baseRangeã‚’åŸºæº–ã¨ã—ãŸæœ€å³åˆ—ã‚’è¿”ã™
+'  baseRange‚ğŠî€‚Æ‚µ‚½Å‰E—ñ‚ğ•Ô‚·
 '
-'ã€€baseRangeï¼šåŸºæº–ã¨ãªã‚‹Range
-'ã€€isIgnoreColumnBlankï¼šç©ºç™½åˆ—ã‚’ç„¡è¦–ã™ã‚‹ã‹,ã€€Trueï¼šç©ºç™½è¡ŒãŠæ§‹ã„ãªã—ã§æœ€çµ‚ãƒ‡ãƒ¼ã‚¿è¡Œã‚’è¿”ã™
+'@baseRangeFŠî€‚Æ‚È‚éRange
+'@isIgnoreColumnBlankF‹ó”’—ñ‚ğ–³‹‚·‚é‚©,@TrueF‹ó”’s‚¨\‚¢‚È‚µ‚ÅÅIƒf[ƒ^s‚ğ•Ô‚·
 '</summary>
 Private Function LastCol(ByVal baseRange As Range, isIgnoreColumnBlank As Boolean) As Long
 
@@ -1299,38 +1355,38 @@ Private Function LastCol(ByVal baseRange As Range, isIgnoreColumnBlank As Boolea
 End Function
 
 '<summary>[private]
-'  ãŸã ã®ä»£å…¥é–¢æ•°ã€‚ãªã‚“ã‹ã€ã—ã‚‡ã£ã¡ã‚…ã†ä½¿ã†ã®ã§
+'  ‚½‚¾‚Ì‘ã“üŠÖ”B‚È‚ñ‚©A‚µ‚å‚Á‚¿‚ã‚¤g‚¤‚Ì‚Å
 '
-'ã€€ä»£å…¥å…ˆï¼šä»£å…¥ã•ã‚Œã‚‹å´
-'ã€€ä»£å…¥å…ƒï¼šã¾ã‚“ã¾ä»£å…¥å…ƒ
+'@‘ã“üæF‘ã“ü‚³‚ê‚é‘¤
+'@‘ã“üŒ³F‚Ü‚ñ‚Ü‘ã“üŒ³
 '</summary>
-Private Sub Assign(ByRef ä»£å…¥å…ˆ As Variant, ByRef ä»£å…¥å…ƒ As Variant)
+Private Sub Assign(ByRef ‘ã“üæ As Variant, ByRef ‘ã“üŒ³ As Variant)
 
-    If IsObject(ä»£å…¥å…ƒ) Then
-        Set ä»£å…¥å…ˆ = ä»£å…¥å…ƒ
+    If IsObject(‘ã“üŒ³) Then
+        Set ‘ã“üæ = ‘ã“üŒ³
     Else
-        ä»£å…¥å…ˆ = ä»£å…¥å…ƒ
+        ‘ã“üæ = ‘ã“üŒ³
     End If
 
 End Sub
 
 '<summary>[private]
-'  ãŸã ã®ä»£å…¥é–¢æ•°ã€‚é…åˆ—ç‰ˆ
+'  ‚½‚¾‚Ì‘ã“üŠÖ”B”z—ñ”Å
 '
-'ã€€ä»£å…¥å…ˆï¼šä»£å…¥ã•ã‚Œã‚‹å´
-'ã€€ä»£å…¥å…ƒï¼šã¾ã‚“ã¾ä»£å…¥å…ƒ
+'@‘ã“üæF‘ã“ü‚³‚ê‚é‘¤
+'@‘ã“üŒ³F‚Ü‚ñ‚Ü‘ã“üŒ³
 '</summary>
-Private Sub AssignArray(ByRef ä»£å…¥å…ˆ As Variant, ByRef ä»£å…¥å…ƒ As Variant)
+Private Sub AssignArray(ByRef ‘ã“üæ As Variant, ByRef ‘ã“üŒ³ As Variant)
 
-    If ArrayRank(ä»£å…¥å…ƒ) = 1 Then
-        For i = LBound(ä»£å…¥å…ƒ) To UBound(ä»£å…¥å…ƒ)
-            Assign ä»£å…¥å…ˆ(i), ä»£å…¥å…ƒ(i)
+    If ArrayRank(‘ã“üŒ³) = 1 Then
+        For i = LBound(‘ã“üŒ³) To UBound(‘ã“üŒ³)
+            Assign ‘ã“üæ(i), ‘ã“üŒ³(i)
         Next i
         
-    ElseIf ArrayRank(ä»£å…¥å…ƒ) = 2 Then
-        For i = LBound(ä»£å…¥å…ƒ) To UBound(ä»£å…¥å…ƒ)
-            For j = LBound(ä»£å…¥å…ƒ, 2) To UBound(ä»£å…¥å…ƒ, 2)
-                Assign ä»£å…¥å…ˆ(i, j), ä»£å…¥å…ƒ(i, j)
+    ElseIf ArrayRank(‘ã“üŒ³) = 2 Then
+        For i = LBound(‘ã“üŒ³) To UBound(‘ã“üŒ³)
+            For j = LBound(‘ã“üŒ³, 2) To UBound(‘ã“üŒ³, 2)
+                Assign ‘ã“üæ(i, j), ‘ã“üŒ³(i, j)
             Next j
         Next i
         
