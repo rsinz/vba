@@ -32,90 +32,90 @@ End Property
 
 '///////// get property //////////
 
-' Œ»İƒZƒbƒg‚³‚ê‚Ä‚¢‚é“ú•t‚ğ‚»‚Ì‚Ü‚Ü•Ô‚·
+' ç¾åœ¨ã‚»ãƒƒãƒˆã•ã‚Œã¦ã„ã‚‹æ—¥ä»˜ã‚’ãã®ã¾ã¾è¿”ã™
 Public Property Get Value() As Variant
     Value = value_
 End Property
 
-' w’è‚ÌƒtƒH[ƒ}ƒbƒg‚É•ÏŠ·‚µ‚Ä•¶š—ñ‚Å•Ô‚·
+' æŒ‡å®šã®ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆã«å¤‰æ›ã—ã¦æ–‡å­—åˆ—ã§è¿”ã™
 Public Property Get ToString(StringFormat As String) As String
     ToString = format(value_, StringFormat)
 End Property
 
-' ‚æ‚­g‚¤ƒtƒH[ƒ}ƒbƒgŒ`®‚É‚µ‚Ä•Ô‚·
+' ã‚ˆãä½¿ã†ãƒ•ã‚©ãƒ¼ãƒãƒƒãƒˆå½¢å¼ã«ã—ã¦è¿”ã™
 Public Property Get ToUsualString() As String
     ToUsualString = ToString("yyyy/mm/dd(aaa) hh:mm")
 End Property
 
-' ‚æ‚­g‚¤•Û‘¶ƒtƒ@ƒCƒ‹–¼‚É‚µ‚Ä•Ô‚·
+' ã‚ˆãä½¿ã†ä¿å­˜ãƒ•ã‚¡ã‚¤ãƒ«åã«ã—ã¦è¿”ã™
 Public Property Get NowStamp() As String
     NowStamp = format(Now, "yyyymmdd_hhmmss")
 End Property
 
-' “ú•t‚Ì•”•ª‚¾‚¯”²‚«o‚µ‚Ä•Ô‚·
+' æ—¥ä»˜ã®éƒ¨åˆ†ã ã‘æŠœãå‡ºã—ã¦è¿”ã™
 Public Property Get ToDate(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     ToDate = DateSerial(Year(dt_), Month(dt_), Day(dt_))
 End Property
 
-' ‚Ì•”•ª‚¾‚¯”²‚«o‚µ‚Ä•Ô‚·
+' æ™‚åˆ»ã®éƒ¨åˆ†ã ã‘æŠœãå‡ºã—ã¦è¿”ã™
 Public Property Get ToTime(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     ToTime = DateSerial(Hour(dt_), Minute(dt_), Second(dt_))
 End Property
 
-' —j“ú‚É•ÏŠ·‚µ‚Ä•Ô‚·
+' æ›œæ—¥ã«å¤‰æ›ã—ã¦è¿”ã™
 Public Property Get ToWeekday(Optional dt As Variant = Empty) As String
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     ToWeekday = WeekdayName(Weekday(dt_), True)
 End Property
 
-' —‚Œ‚ğ•Ô‚·
+' ç¿Œæœˆã‚’è¿”ã™
 Public Property Get NextMonth(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     NextMonth = Add(Month_, 1, dt_)
 End Property
 
-' ‘OŒ‚ğ•Ô‚·
+' å‰æœˆã‚’è¿”ã™
 Public Property Get PreviousMonth(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     PreviousMonth = Add(Month_, -1, dt_)
 End Property
 
-' —‚T‚ğ•Ô‚·
+' ç¿Œé€±ã‚’è¿”ã™
 Public Property Get NextWeek(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     NextWeek = Add(Day_, 7, dt_)
 End Property
 
-' æT‚ğ•Ô‚·
+' å…ˆé€±ã‚’è¿”ã™
 Public Property Get PreviousWeek(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
     PreviousWeek = Add(Day_, -7, dt_)
 End Property
 
-' ‰[”N”»’è
+' é–å¹´åˆ¤å®š
 Public Property Get IsLeapYear(Optional dt As Variant = Empty) As Boolean
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
-    IsLeapYear = IIf(Day(DateSerial(Year(dt_), 2, 29)) = 29, True, False)       ' 2/29‚ğDayŠÖ”‚É“Ë‚Á‚ñ‚Å29‚ª•Ô‚Á‚Ä‚«‚½‚ç‰[”NB1‚ª•Ô‚Á‚Ä‚«‚½‚ç‰[”N‚¶‚á‚È‚¢B
+    IsLeapYear = IIf(Day(DateSerial(Year(dt_), 2, 29)) = 29, True, False)       ' 2/29ã‚’Dayé–¢æ•°ã«çªã£è¾¼ã‚“ã§29ãŒè¿”ã£ã¦ããŸã‚‰é–å¹´ã€‚1ãŒè¿”ã£ã¦ããŸã‚‰é–å¹´ã˜ã‚ƒãªã„ã€‚
 End Property
 
 
 '///////// functions //////////
 
-' BeginOfMonth:          w’è‚³‚ê‚½“ú•t‚ÌŒ‚ÌÅ‰‚Ì“ú•t‚ğ•Ô‚·
-' EndOfMonth:             w’è‚³‚ê‚½“ú•t‚ÌŒ‚ÌÅŒã‚Ì“ú•t‚ğ•Ô‚·
-' BeginOfWeek:           w’è‚³‚ê‚½“ú•t‚ÌT‚ÌÅ‰‚Ì“ú•t‚ğ•Ô‚·
-' EndOfWeek:              w’è‚³‚ê‚½“ú•t‚ÌT‚ÌÅŒã‚Ì“ú•t‚ğ•Ô‚·
-' Add:                          “ú•t‚Ì‰ÁŒ¸Z
-' Between:                 ‚Q‚Â‚Ì“ú•t‚ÌŠÔŠu
+' BeginOfMonth:          æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®æœˆã®æœ€åˆã®æ—¥ä»˜ã‚’è¿”ã™
+' EndOfMonth:             æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®æœˆã®æœ€å¾Œã®æ—¥ä»˜ã‚’è¿”ã™
+' BeginOfWeek:           æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®é€±ã®æœ€åˆã®æ—¥ä»˜ã‚’è¿”ã™
+' EndOfWeek:              æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®é€±ã®æœ€å¾Œã®æ—¥ä»˜ã‚’è¿”ã™
+' Add:                          æ—¥ä»˜ã®åŠ æ¸›ç®—
+' Between:                 ï¼’ã¤ã®æ—¥ä»˜ã®é–“éš”
 
 
 
 '<summary>[Private]
-'  DateType ‚ğ•¶š—ñ‚É•ÏŠ·‚·‚éBDateAdd—p
+'  DateType ã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹ã€‚Addç”¨
 '
-'  dF—ñ‹“Œ^DateType ‚©‚ç‘I‚Ô
+'  dï¼šåˆ—æŒ™å‹DateType ã‹ã‚‰é¸ã¶
 '</summary>
 Private Function ToDateChar(d As DateType) As String
     Select Case d
@@ -129,9 +129,9 @@ Private Function ToDateChar(d As DateType) As String
 End Function
 
 '<summary>
-'  w’è‚³‚ê‚½“ú•t‚ÌŒ‚ÌÅ‰‚Ì“ú•t‚ğ•Ô‚·
+'  æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®æœˆã®æœ€åˆã®æ—¥ä»˜ã‚’è¿”ã™
 '
-'  [È—ª‰Â] dtFŠî€‚Æ‚È‚é“ú•t
+'  [çœç•¥å¯] dtï¼šåŸºæº–ã¨ãªã‚‹æ—¥ä»˜
 '</summary>
 Function BeginOfMonth(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
@@ -139,9 +139,9 @@ Function BeginOfMonth(Optional dt As Variant = Empty) As Date
 End Function
 
 '<summary>
-'  w’è‚³‚ê‚½“ú•t‚ÌŒ‚ÌÅŒã‚Ì“ú•t‚ğ•Ô‚·
+'  æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®æœˆã®æœ€å¾Œã®æ—¥ä»˜ã‚’è¿”ã™
 '
-'  [È—ª‰Â] dtFŠî€‚Æ‚È‚é“ú•t
+'  [çœç•¥å¯] dtï¼šåŸºæº–ã¨ãªã‚‹æ—¥ä»˜
 '</summary>
 Function EndOfMonth(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
@@ -149,10 +149,10 @@ Function EndOfMonth(Optional dt As Variant = Empty) As Date
 End Function
 
 '<summary>
-'  w’è‚³‚ê‚½“ú•t‚ÌT‚ÌÅ‰‚Ì“ú•t‚ğ•Ô‚·
+'  æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®é€±ã®æœ€åˆã®æ—¥ä»˜ã‚’è¿”ã™
 '
-'  [È—ª‰Â] dtFŠî€‚Æ‚È‚é“ú•t
-'@[È—ª‰Â] FirstDayOfWeekFTn‚ß‚Ì—j“úBƒfƒtƒHƒ‹ƒg‚Å“ú—j
+'  [çœç•¥å¯] dtï¼šåŸºæº–ã¨ãªã‚‹æ—¥ä»˜
+'ã€€[çœç•¥å¯] FirstDayOfWeekï¼šé€±å§‹ã‚ã®æ›œæ—¥ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§æ—¥æ›œ
 '</summary>
 Function BeginOfWeek(Optional dt As Variant = Empty, Optional FirstDayOfWeek As VbDayOfWeek = vbSunday) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
@@ -160,10 +160,10 @@ Function BeginOfWeek(Optional dt As Variant = Empty, Optional FirstDayOfWeek As 
 End Function
 
 '<summary>
-'  w’è‚³‚ê‚½“ú•t‚ÌT‚ÌÅŒã‚Ì“ú•t‚ğ•Ô‚·
+'  æŒ‡å®šã•ã‚ŒãŸæ—¥ä»˜ã®é€±ã®æœ€å¾Œã®æ—¥ä»˜ã‚’è¿”ã™
 '
-'  [È—ª‰Â] dtFŠî€‚Æ‚È‚é“ú•t
-'@[È—ª‰Â] FirstDayOfWeekFTn‚ß‚Ì—j“úBƒfƒtƒHƒ‹ƒg‚Å“ú—j
+'  [çœç•¥å¯] dtï¼šåŸºæº–ã¨ãªã‚‹æ—¥ä»˜
+'ã€€[çœç•¥å¯] FirstDayOfWeekï¼šé€±å§‹ã‚ã®æ›œæ—¥ã€‚ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã§æ—¥æ›œ
 '</summary>
 Function EndOfWeek(Optional dt As Variant = Empty, Optional FirstDayOfWeek As VbDayOfWeek = vbSunday) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
@@ -171,11 +171,11 @@ Function EndOfWeek(Optional dt As Variant = Empty, Optional FirstDayOfWeek As Vb
 End Function
 
 '<summary>
-'  “ú•t‚Ì‰ÁŒ¸Z
+'  æ—¥ä»˜ã®åŠ æ¸›ç®—
 '
-'  type_ : “ú‚Æ‚©•b‚Æ‚©ŒvZ’PˆÊ‚ğw’è
-'  v : ‚Ç‚ê‚¾‚¯‰ÁŒ¸Z‚·‚é‚©
-'  [È—ª‰Â] dtFŠî€‚Æ‚È‚é“ú•t
+'  type_ : æ—¥ã¨ã‹ç§’ã¨ã‹è¨ˆç®—å˜ä½ã‚’æŒ‡å®š
+'  v : ã©ã‚Œã ã‘åŠ æ¸›ç®—ã™ã‚‹ã‹
+'  [çœç•¥å¯] dtï¼šåŸºæº–ã¨ãªã‚‹æ—¥ä»˜
 '</summary>
 Function Add(type_ As DateType, v As Double, Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
@@ -183,10 +183,10 @@ Function Add(type_ As DateType, v As Double, Optional dt As Variant = Empty) As 
 End Function
 
 '<summary>
-'  ‚Q‚Â‚Ì“ú•t‚ÌŠÔŠu
+'  ï¼’ã¤ã®æ—¥ä»˜ã®é–“éš”
 '
-'  dt1 : ‚P‚Â–Ú‚Ì“ú•t
-'  [È—ª‰Â] dt2F‚Q‚Â–Ú‚Ì“ú•t
+'  dt1 : ï¼‘ã¤ç›®ã®æ—¥ä»˜
+'  [çœç•¥å¯] dt2ï¼šï¼’ã¤ç›®ã®æ—¥ä»˜
 '</summary>
 Function Between(dt1 As Variant, Optional dt2 As Variant = Empty) As Double
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt2), value_, CDate(dt2))
