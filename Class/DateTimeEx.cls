@@ -47,11 +47,6 @@ Public Property Get ToUsualString() As String
     ToUsualString = ToString("yyyy/mm/dd(aaa) hh:mm")
 End Property
 
-' よく使う保存ファイル名にして返す
-Public Property Get NowStamp() As String
-    NowStamp = format(Now, "yyyymmdd_hhmmss")
-End Property
-
 ' 日付の部分だけ抜き出して返す
 Public Property Get ToDate(Optional dt As Variant = Empty) As Date
     Dim dt_ As Date: dt_ = IIf(IsEmpty(dt), value_, CDate(dt))
