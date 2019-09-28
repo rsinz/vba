@@ -7,14 +7,14 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' ÅIXV“úF2018/09/18  —rsinz
-' Function Add’Ç‰Á
-' UnionƒoƒOC³
+' ÅIXV“úF2019/09/28  —rsinz
+' Let value : ˆø”‚ªƒvƒŠƒ~ƒeƒBƒu•Ï”‚ÌÛ‚ÉA”z—ñ‚Åó‚¯“ü‚ê‚é‚æ‚¤‚É•ÏX
+' Mode_ : Å•p’l‚ªæ“¾‚Å‚«‚È‚¢‚ÌƒGƒ‰[‰ñ”ğ’Ç‰Á
 
 '///////// memo //////////
 ' ƒIƒuƒWƒFƒNƒg“àƒGƒ‰[‚ÍƒCƒ~ƒfƒBƒGƒCƒgƒEƒBƒ“ƒhƒE‚É•\¦‚µ‚Ü‚·
 ' 3ŸŒ³ˆÈã‚Ì”z—ñ‚Í„§‚µ‚Ü‚¹‚ñ
-' For each ‚Å‰ñ‚·Û‚Í.Value ‚ğg‚Á‚Ä‚­‚¾‚³‚¢BƒEƒHƒbƒ`ƒEƒBƒ“ƒhƒE‚ÅƒNƒ‰ƒbƒVƒ…‚·‚é–Û‚ğ‰ñ”ğ‚Å‚«‚È‚©‚Á‚½‚Å‚·BNewEnum‚Ì’†‚Å“à•”ŠÖ”‚ğg‚¤‚Æƒ_ƒ‚İ‚½‚¢
+' For each ‚Å‰ñ‚·Û‚Í.value ‚ğg‚Á‚Ä‚­‚¾‚³‚¢BƒEƒHƒbƒ`ƒEƒBƒ“ƒhƒE‚ÅƒNƒ‰ƒbƒVƒ…‚·‚é–Û‚ğ‰ñ”ğ‚Å‚«‚È‚©‚Á‚½‚Å‚·BNewEnum‚Ì’†‚Å“à•”ŠÖ”‚ğg‚¤‚Æƒ_ƒ‚İ‚½‚¢
 
 
 '///////// property list //////////
@@ -31,6 +31,7 @@ Attribute VB_Exposed = False
 ' Is1D :                    [Get] 1 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
 ' Is2D :                    [Get] 2 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
 ' IsJagg :                 [Get] ƒWƒƒƒO”z—ñ‚¾‚Á‚½‚çTRUE
+' IsEqual :               [Get] ”z—ñ—v‘f‚ª“¯‚¶‚¾‚Á‚½‚çTRUE
 ' ArrayRank :           [Get] ”z—ñ‚ÌŸŒ³”
 ' Exist :                   [Get] ”z—ñ“à‚Å‚Ìw’è’l‘¶İƒ`ƒFƒbƒN
 ' Average_ :            [Get] •½‹Ï’l‚ÌZo
@@ -67,16 +68,38 @@ Attribute VB_Exposed = False
 
 '///////// variables //////////
 Private default_ As Variant       ' ƒƒ\ƒbƒh‚ğg—p‚·‚é‚Æ“à•”•Ï” array_‚ğ•ÏX‚·‚éd—l‚É‚µ‚Ä‚¨‚è‚Ü‚·(ƒƒ\ƒbƒhƒ`ƒF[ƒ“‚Ì‚½‚ß)‚Ì‚ÅAŒvZ‘O‚É–ß‚µ‚½‚¢‚Æ‚«—p‚É•Û‚µ‚Ä‚¢‚Ü‚·
-Private array_ As Variant
-Private header_ As Variant
+Public array_ As Variant
+Private Header_ As Variant
 
 '///////// class property //////////
 
 ' [Let] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
 Public Property Let value(v As Variant)
 Attribute value.VB_UserMemId = 0
-    default_ = v
-    array_ = v
+    
+    If IsEmpty(v) Or IsArray(v) Then
+        
+        If Is2D(v) Then
+            If Count(xlColumns, v) = 1 Then v = To1D(v)
+        End If
+        
+        default_ = v
+        array_ = v
+    Else
+        ReDim default_(0) As Variant: default_(0) = v
+        ReDim array_(0) As Variant: array_(0) = v
+    End If
+    
+End Property
+
+' [Let] “à•”‚PŸŒ³”z—ñƒZƒbƒg—p
+Public Property Let Set1(row As Long, v As Variant)
+    array_(row) = v
+End Property
+
+' [Let] “à•”‚QŸŒ³”z—ñƒZƒbƒg—p
+Public Property Let Set2(row As Long, col As Long, v As Variant)
+    array_(row, col) = v
 End Property
 
 ' [Let] •\Œ`®‚É‚È‚Á‚Ä‚¢‚éƒe[ƒuƒ‹ƒf[ƒ^‚ğƒZƒbƒg‚µ‚Ü‚·
@@ -87,7 +110,7 @@ Public Property Let SetTable(‹ó”’s‚ğ–³‹ As Boolean, ‹ó”’—ñ‚ğ–³‹ As Boolean, 
     Dim lastCol_ As Long: lastCol_ = LastCol(¶ã‚ÌƒŒƒ“ƒW, ‹ó”’—ñ‚ğ–³‹)
         
     With ¶ã‚ÌƒŒƒ“ƒW.Parent
-        value = .Range(.Cells(¶ã‚ÌƒŒƒ“ƒW.Row, ¶ã‚ÌƒŒƒ“ƒW.column), .Cells(lastRow_, lastCol_))
+        value = .Range(.Cells(¶ã‚ÌƒŒƒ“ƒW.row, ¶ã‚ÌƒŒƒ“ƒW.column), .Cells(lastRow_, lastCol_))
     End With
     
 End Property
@@ -103,7 +126,7 @@ End Property
 ' [Let] ƒwƒbƒ_[‚Ìİ’è
 Public Property Let Headers(h As Variant)
     If Is2D(h) Then h = To1D(h)
-    header_ = h
+    Header_ = h
 End Property
 
 ' [Get] ƒfƒtƒHƒ‹ƒgƒvƒƒpƒeƒB
@@ -169,13 +192,13 @@ End Property
 ' [Get] 1 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
 Public Property Get Is1D(Optional ”z—ñ As Variant = Empty) As Boolean
     Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
-    Is1D = IIf(ArrayRank(arr) = 1, True, False)
+    Is1D = (ArrayRank(arr) = 1)
 End Property
 
 ' [Get] 2 ŸŒ³”z—ñ‚¾‚Á‚½‚çTRUE
 Public Property Get Is2D(Optional ”z—ñ As Variant = Empty) As Boolean
     Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
-    Is2D = IIf(ArrayRank(arr) = 2, True, False)
+    Is2D = (ArrayRank(arr) = 2)
 End Property
 
 ' [Get] ƒWƒƒƒO”z—ñ‚¾‚Á‚½‚çTRUE
@@ -199,6 +222,12 @@ Function IsJagg(Optional ”z—ñ As Variant = Empty) As Boolean
     Next v1
     
 End Function
+
+' [Get] ”z—ñ—v‘f‚ª“¯‚¶‚¾‚Á‚½‚çTRUE
+Public Property Get IsEqual(ByVal ”äŠr‚·‚é”z—ñ As Variant, Optional ”z—ñ As Variant = Empty) As Boolean
+    Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
+    IsEqual = (Join(arr) = Join(”äŠr‚·‚é”z—ñ))
+End Property
 
 ' [Get] ”z—ñ‚ÌŸŒ³”
 Public Property Get ArrayRank(Optional ”z—ñ As Variant = Empty) As Integer
@@ -236,7 +265,6 @@ Public Property Get Average_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Varian
     Select Case ArrayRank(arr)
         Case 1: Average_ = WorksheetFunction.Average(arr)
         Case 2: Average_ = WorksheetFunction.Average(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
     
 End Property
@@ -249,7 +277,6 @@ Public Property Get Sum_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = 
     Select Case ArrayRank(arr)
         Case 1: Sum_ = WorksheetFunction.Sum(arr)
         Case 2: Sum_ = WorksheetFunction.Sum(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
 
 End Property
@@ -262,7 +289,6 @@ Public Property Get Median_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant
     Select Case ArrayRank(arr)
         Case 1: Median_ = WorksheetFunction.Median(arr)
         Case 2: Median_ = WorksheetFunction.Median(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
 
 End Property
@@ -275,7 +301,6 @@ Public Property Get Max_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = 
     Select Case ArrayRank(arr)
         Case 1: Max_ = WorksheetFunction.Max(arr)
         Case 2: Max_ = WorksheetFunction.Max(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
 
 End Property
@@ -288,7 +313,6 @@ Public Property Get Min_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = 
     Select Case ArrayRank(arr)
         Case 1: Min_ = WorksheetFunction.Min(arr)
         Case 2: Min_ = WorksheetFunction.Min(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
 
 End Property
@@ -296,14 +320,20 @@ End Property
 ' [Get] Å•p’l‚ÌZoBÅ•p’l‚Í•¡”‚ ‚é‚©‚à‚µ‚ê‚È‚¢‚Ì‚ÅA•Ô‚è’l‚Í”z—ñ‚É‚µ‚Ä‚¢‚Ü‚·B
 Public Property Get Mode_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant = Empty) As Variant
 
+    On Error GoTo ErrHandler
+    
     Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
     
     Select Case ArrayRank(arr)
         Case 1: Mode_ = WorksheetFunction.Mode_Mult(arr)
         Case 2: Mode_ = WorksheetFunction.Mode_Mult(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
     
+    GoTo Finnally
+ErrHandler:
+    Debug.Print "ArrayEx.Mode_: ‘S‚ÄˆêˆÓ‚Ì”z—ñ‚Å‚·BÅ•p’l‚ªæ“¾‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B"
+    Mode_ = Empty
+Finnally:
 End Property
 
 ' [Get] •W€•Î·‚ÌZo
@@ -314,7 +344,6 @@ Public Property Get StDev_(Optional —ñ”Ô As Long = -1, Optional ”z—ñ As Variant 
     Select Case ArrayRank(arr)
         Case 1: StDev_ = WorksheetFunction.StDevP(arr)
         Case 2: StDev_ = WorksheetFunction.StDevP(Slicer(—ñ”Ô, xlVerticalCoordinate, arr))
-                    array_ = arr
     End Select
 
 End Property
@@ -402,12 +431,12 @@ End Function
 '  [Get]“à•”•Ï”header ‚Ì’†‚©‚çAw’è‚³‚ê‚½—ñ–¼‚ÌƒCƒ“ƒfƒbƒNƒX‚ğ•Ô‚·
 ' —ñ–¼ : —ñ‚Ì–¼‘O‚ğ•¶š—ñ‚Åw’è
 '</summary>
-Public Property Get Col(ByVal —ñ–¼ As String) As Long
+Public Property Get col(ByVal —ñ–¼ As String) As Long
 
-    If IsEmpty(header_) Then Debug.Print "ArrayEx.Col : ƒwƒbƒ_[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBHeaders ƒvƒƒpƒeƒB‚ğ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B": Exit Property
-    Dim ret As Long: ret = Search1D(—ñ–¼, LBound(header_), header_)
+    If IsEmpty(Header_) Then Debug.Print "ArrayEx.Col : ƒwƒbƒ_[‚ªİ’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñBHeaders ƒvƒƒpƒeƒB‚ğ—˜—p‚µ‚Ä‚­‚¾‚³‚¢B": Exit Property
+    Dim ret As Long: ret = Search1D(—ñ–¼, LBound(Header_), Header_)
     If ret = -1 Then Debug.Print "ArrayEx.Col : " & —ñ–¼ & " ‚Æ‚¢‚¤—ñ‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB³‚µ‚­w’è‚µ‚Ä‚¢‚é‚©Šm”F‚µ‚Ä‚­‚¾‚³‚¢B": Exit Property
-    Col = ret
+    col = ret
 
 End Property
 
@@ -700,7 +729,7 @@ End Function
 '@ŒŸõsFŒŸõ‚·‚é—ñ”Ô†
 '@[È—ª‰Â]  ŒŸõ•û–@FŠ®‘Sˆê’v‚©•”•ªˆê’v@ƒfƒtƒHƒ‹ƒgFŠ®‘Sˆê’v
 '</summary>
-Function Filter_(ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, _
+Function filter_(ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, _
                              Optional ŒŸõ•û–@ As XlLookAt = XlLookAt.xlWhole, Optional ”z—ñ = Empty) As ArrayEx
 
     Dim arr As Variant: arr = IIf(IsEmpty(”z—ñ), array_, ”z—ñ)
@@ -717,7 +746,7 @@ Function Filter_(ŒŸõ’l As Variant, Optional ŒŸõ—ñ As Long = 0, _
     End Select
 
 ExitHandler:
-    array_ = ret: Set Filter_ = Me
+    array_ = ret: Set filter_ = Me
 End Function
 
 Private Function FilterOn1D(ŒŸõ’l As Variant, arr As Variant) As Variant
@@ -777,7 +806,7 @@ Function Append(Optional s—ñ‘I‘ğ As XlRowCol = XlRowCol.xlRows, Optional ”z—ñ A
     
 '    If IsArray(arr) = False Then Debug.Print "ArrayEx.Append: ‘ÎÛ‚Ì”z—ñ‚ğw’è‚µ‚Ä‚­‚¾‚³‚¢": GoTo ExitHandler
 
-    If IsEmpty(arr) Then
+    If UBound(arr) = -1 Then
         ReDim ret(0) As Variant
 
     Else
@@ -1057,6 +1086,49 @@ Private Function JaggTo2D(arr As Variant) As Variant
 End Function
 
 '<summary>
+'@”z—ñ‚Ì”äŠr‚ğ‚µ‚Ü‚·Bƒf[ƒ^‚ªˆá‚¤s”Ô†‚ğ•Ô‚µ‚Ü‚·B
+'
+'@”äŠr”z—ñF”äŠr‘ÎÛ‚Ì”z—ñ
+'</summary>
+Function Compare(ByVal ”äŠr”z—ñ As Variant) As ArrayEx
+
+    Dim ret_ As Variant
+    If Not IsArray(array_) And Not IsArray(”äŠr”z—ñ) Then ret_ = (array_ = ”äŠr”z—ñ): GoTo ExitHandler
+    If ArrayRank(array_) <> ArrayRank(”äŠr”z—ñ) Then ret_ = False: GoTo ExitHandler
+    
+    Select Case ArrayRank(”äŠr”z—ñ)
+        Case 1: ret_ = Compare1D(array_, ”äŠr”z—ñ)
+        Case 2: ret_ = Compare2D(array_, ”äŠr”z—ñ)
+    End Select
+    If UBound(ret_) = -1 Then ret_ = Empty
+
+ExitHandler:
+    array_ = ret_: Set Compare = Me
+End Function
+
+Private Function Compare1D(ByVal arr1 As Variant, ByVal arr2 As Variant) As Variant
+    
+    Dim ret_ As Variant: ret_ = Array()
+    For i = LBound(arr1) To UBound(arr1)
+        If arr1(i) <> arr2(i) Then ret_ = Add(i, , ret_): Exit For
+    Next i
+
+    Compare1D = ret_
+End Function
+
+Private Function Compare2D(ByVal arr1 As Variant, ByVal arr2 As Variant) As Variant
+    
+    Dim ret_ As Variant: ret_ = Array()
+    For i = LBound(arr1) To UBound(arr1)
+        For j = LBound(arr1, 2) To UBound(arr1, 2)
+            If arr1(i, j) <> arr2(i, j) Then ret_ = Add(i, , ret_): Exit For
+        Next j
+    Next i
+
+    Compare2D = ret_
+End Function
+
+'<summary>
 '  ExcelƒV[ƒg‚É”z—ñƒf[ƒ^‚ğ“\‚è•t‚¯‚é
 
 '  baseRange : “\‚è•t‚¯‚éŠî€(¶ã)‚ÌƒŒƒ“ƒW
@@ -1071,7 +1143,7 @@ Sub ToSheet(baseRange As Range, Optional ”z—ñ As Variant = Empty)
     Else
         Dim ws As Worksheet: Set ws = Worksheets(baseRange.Parent.name)
         Dim wb As Workbook: Set wb = Workbooks(ws.Parent.name)
-        Dim baseRow As Long: baseRow = baseRange.Row
+        Dim baseRow As Long: baseRow = baseRange.row
         Dim baseColumn As Long: baseColumn = baseRange.column
         
         With wb.Worksheets(ws.name): .Activate
@@ -1191,12 +1263,12 @@ Function FROM(Optional header1D As Variant = Empty, Optional ”z—ñ As Variant = E
         FROM = " FROM [" & .name & "$] "
         Select Case ArrayRank(arr)
             Case 1:
-                FROM = " FROM [" & .name & "$" & .Cells(1, 1).Address(False, False) & ":" & _
-                            .Cells(UBound(arr) - LBound(arr) + 2).Address(False, False) & "] "
+                FROM = " FROM [" & .name & "$" & .Cells(1, 1).address(False, False) & ":" & _
+                            .Cells(UBound(arr) - LBound(arr) + 2).address(False, False) & "] "
 
             Case 2:
-                FROM = " FROM [" & .name & "$" & .Cells(1, 1).Address(False, False) & ":" & _
-                            .Cells(UBound(arr, 1) - LBound(arr, 1) + 2, UBound(arr, 2) - LBound(arr, 2) + 1).Address(False, False) & "] "
+                FROM = " FROM [" & .name & "$" & .Cells(1, 1).address(False, False) & ":" & _
+                            .Cells(UBound(arr, 1) - LBound(arr, 1) + 2, UBound(arr, 2) - LBound(arr, 2) + 1).address(False, False) & "] "
         End Select
         
     End With
@@ -1216,68 +1288,68 @@ Sub DebugPrint(Optional ByVal ”z—ñ As Variant = Empty)
 
 End Sub
 
-Function Dump(ByVal x As Variant) As String
+Function Dump(ByVal X As Variant) As String
 
-    Dim ty As String: ty = TypeName(x)
+    Dim ty As String: ty = TypeName(X)
     
-    If IsObject(x) Then Dump = ty: GoTo Escape
+    If IsObject(X) Then Dump = ty: GoTo Escape
     Select Case ty
-    Case "Boolean":     Dump = x
-    Case "Integer":     Dump = x & "%"
-    Case "Long":        Dump = x & "&"
+    Case "Boolean":     Dump = X
+    Case "Integer":     Dump = X & "%"
+    Case "Long":        Dump = X & "&"
     #If VBA7 And Win64 Then
-    Case "LongLong":    Dump = x & "^"
+    Case "LongLong":    Dump = X & "^"
     #End If
-    Case "Single":      Dump = x & "!"
-    Case "Double":      Dump = x & "#"
-    Case "Currency":    Dump = x & "@"
-    Case "Byte":        Dump = "CByte(" & x & ")"
-    Case "Decimal":     Dump = "CDec(" & x & ")"
+    Case "Single":      Dump = X & "!"
+    Case "Double":      Dump = X & "#"
+    Case "Currency":    Dump = X & "@"
+    Case "Byte":        Dump = "CByte(" & X & ")"
+    Case "Decimal":     Dump = "CDec(" & X & ")"
     Case "Date":
         Dim d As String, t As String
-        If Abs(x) >= 1 Then d = Month(x) & "/" & Day(x) & "/" & Year(x)
-        If Not IsInt(x) Then t = format(x, "h:nn:ss AM/PM")
+        If Abs(X) >= 1 Then d = Month(X) & "/" & Day(X) & "/" & Year(X)
+        If Not IsInt(X) Then t = format(X, "h:nn:ss AM/PM")
         Dump = "#" & Trim(d & " " & t) & "#"
     Case "String"
-        If StrPtr(x) = 0 Then
+        If StrPtr(X) = 0 Then
             Dump = "(vbNullString)"
         Else
-            Dump = """" & x & """"
+            Dump = """" & X & """"
         End If
     Case "Empty", "Null", "Nothing"
         Dump = "(" & ty & ")"
     Case "Error"
-        If IsMissing(x) Then
+        If IsMissing(X) Then
             Dump = "(Missing)"
         Else
-            Dump = "CVErr(" & ReMatch(CStr(x), "\d+")(0) & ")"
+            Dump = "CVErr(" & ReMatch(CStr(X), "\d+")(0) & ")"
         End If
     Case "ErrObject"
-        Dump = "Err " & x.Number
+        Dump = "Err " & X.Number
     Case "Unknown"
         Dump = ty
     Case Else
-        If Not IsArray(x) Then Dump = "": GoTo Escape
+        If Not IsArray(X) Then Dump = "": GoTo Escape
         
-        Dim lb As Long: lb = LBound(x)
-        Dim ub As Long: ub = UBound(x)
+        Dim lb As Long: lb = LBound(X)
+        Dim ub As Long: ub = UBound(X)
         Dim ar As Variant
         Dim i As Long
         
-        If ArrayRank(x) = 1 Then         ' 1ŸŒ³”z—ñ
+        If ArrayRank(X) = 1 Then         ' 1ŸŒ³”z—ñ
             ReDim ar(lb To ub)
-            For i = lb To ub: ar(i) = Dump(x(i)): Next
+            For i = lb To ub: ar(i) = Dump(X(i)): Next
             Dump = "Array1D(" & vbNewLine & vbTab & Join(ar, ", " & vbNewLine & vbTab) & vbNewLine & ")"
         
-        ElseIf ArrayRank(x) = 2 Then   ' 2ŸŒ³”z—ñ
+        ElseIf ArrayRank(X) = 2 Then   ' 2ŸŒ³”z—ñ
             Dim j As Long
             Dim jStr As String
-            Dim lb2 As Long: lb2 = LBound(x, 2)
-            Dim ub2 As Long: ub2 = UBound(x, 2)
+            Dim lb2 As Long: lb2 = LBound(X, 2)
+            Dim ub2 As Long: ub2 = UBound(X, 2)
             ReDim ar(lb2 To ub2)
             
             For i = lb To ub
-                For j = lb2 To ub2: ar(j) = Dump(x(i, j)): Next
+                For j = lb2 To ub2: ar(j) = Dump(X(i, j)): Next
                 jStr = jStr & vbNewLine & vbTab & Join(ar, ", " & vbTab)
                 If i < ub Then jStr = jStr & ","
             Next i
@@ -1328,11 +1400,11 @@ Private Function LastRow(ByVal baseRange As Range, isIgnoreRowBlank As Boolean) 
 
     With baseRange.Parent
         LastRow = IIf(isIgnoreRowBlank = True, _
-                                .Cells(.Rows.Count, baseRange.column).End(xlUp).Row, _
-                                baseRange.End(xlDown).Row)
+                                .Cells(.Rows.Count, baseRange.column).End(xlUp).row, _
+                                baseRange.End(xlDown).row)
     End With
     
-    If LastRow < baseRange.Row Then LastRow = baseRange.Row
+    If LastRow < baseRange.row Then LastRow = baseRange.row
 
 End Function
 
@@ -1346,7 +1418,7 @@ Private Function LastCol(ByVal baseRange As Range, isIgnoreColumnBlank As Boolea
 
     With baseRange.Parent
         LastCol = IIf(isIgnoreColumnBlank = True, _
-                            .Cells(baseRange.Row, .Columns.Count).End(xlToLeft).column, _
+                            .Cells(baseRange.row, .Columns.Count).End(xlToLeft).column, _
                             baseRange.End(xlToRight).column)
     End With
     
